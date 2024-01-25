@@ -1,0 +1,20 @@
+{
+  "name": "awa_project",
+  "version": "1.0.0",
+  "description": "Course project for Advanced Web Applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "cd client && npm install",
+    "dev:client": "cd client && npm start",
+    "preinstall": "cd server && npm install",
+    "dev:server": "cd server && npm run dev",
+    "build": "cd client && npm run build"
+  },
+  "author": "aRakkolainen",
+  "license": "ISC",
+  "dependencies": {
+    "http-proxy-middleware": "^2.0.6",
+    "react-router-dom": "^6.21.3"
+  }
+}
