@@ -14,6 +14,7 @@
   "author": "aRakkolainen",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "http-proxy-middleware": "^2.0.6",
     "react-router-dom": "^6.21.3"
   }

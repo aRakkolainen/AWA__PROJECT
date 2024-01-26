@@ -1,9 +1,18 @@
+// How to show currently logged in user: https://stackoverflow.com/questions/65060748/react-js-how-to-get-and-show-current-user-when-logged-in
+
 import "./styles.css";
 import {useState} from 'react';
 //Based on course materials from week 12!
 const Login = function ({setJwt, jwt, setUser}) {
     const [userData, setUserData] = useState({});
-
+    function storeToken(token) {
+        localStorage.setItem("auth_token", token);
+        localStorage.setItem("username", userData.username)
+    }   
+    function storeUsername(email) {
+        let temp = email.split("@");
+        localStorage.setItem("username", temp[0]);
+    }
     const handleSubmit = (event) => {
         event.preventDefault(); 
         fetch("/api/user/login", {
@@ -18,7 +27,10 @@ const Login = function ({setJwt, jwt, setUser}) {
         .then(data => {
             console.log(data)
             if (data.token) {
-                setJwt(data.token)
+                setJwt(data.token);
+                storeToken(data.token);
+                storeUsername(userData.email);
+                window.location.href = "/api/main";
             }
         })
     }
@@ -34,7 +46,7 @@ const Login = function ({setJwt, jwt, setUser}) {
                 <br></br>
                 <br></br>
                 <label for="password">Password: </label>
-                <input name="password" type="password"></input>
+                <input name="password" type="password" autoComplete="current-password"></input>
                 <br></br>
                 <button id="submit">Login</button>
             </form> 
