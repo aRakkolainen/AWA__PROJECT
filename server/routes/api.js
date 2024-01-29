@@ -38,6 +38,9 @@ router.post('/user/login', upload.none(),  async function(req, res, next) {
       }
     }
   })
+  router.get("/main", validateToken, function(req, res) {
+    res.send("HELLO")
+})
 
 router.post('/user/register', async (req, res) => {
   body("email").isEmail(),
@@ -78,9 +81,6 @@ router.post('/user/register', async (req, res) => {
       res.status(statusNum).send(message);
       //return res.redirect("/register.html");
     }
-})
-router.get("/main", validateToken, function(req, res) {
-    console.log("Allowed!")
 })
 
 router.get("/user/list", validateToken, async function(req, res) {

@@ -30,7 +30,7 @@ const Login = function ({setJwt, jwt, setUser}) {
                 setJwt(data.token);
                 storeToken(data.token);
                 storeUsername(userData.email);
-                window.location.href = "/api/main";
+                window.location.replace("/api/main");
             }
         })
     }

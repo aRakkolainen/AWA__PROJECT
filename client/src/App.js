@@ -9,7 +9,7 @@ import 'react-bootstrap';
 //import ShowUsers from './components/ShowUsers';
 
 import {useState} from "react";
-import MainPage from './components/MainPage';
+//import MainPage from './components/MainPage';
 function App() {
   const [jwt, setJwt] = useState("");
   const [user, setUser] = useState({});
@@ -26,7 +26,6 @@ function App() {
             <Header text="Register"></Header>
             <Register></Register>
           </>}></Route>
-          <Route path="/api/main" element={<MainPage></MainPage>}></Route>
           <Route path="/api/editProfile" element={<Profile user={user}></Profile>}></Route>
         </Routes>
     </div>

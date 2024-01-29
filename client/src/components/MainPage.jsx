@@ -2,12 +2,29 @@
 import Header from "./Header";
 import ShowUsers from "./ShowUsers";
 import Navigation from "./Navigation";
+import {useEffect} from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 const MainPage = () => {
+    useEffect(() => {
+        fetch("/api/main", {
+            headers: {
+                "authorization": "Bearer " + localStorage.getItem("auth_token")
+            }
+        })
+        .then(console.log("main page"))
+    })
     return(
         <>
-        <Navigation></Navigation>
-        <Header text="Welcome to New Friends Site!"></Header>
-        <ShowUsers></ShowUsers>
+        <Router>
+            <Route path="/api/main" element={
+                <>
+                <Navigation></Navigation>
+                <Header text="Welcome to New Friends Site!"></Header>
+                <ShowUsers></ShowUsers>
+                </>
+            }>
+            </Route>
+        </Router>
         
     </>
     )
