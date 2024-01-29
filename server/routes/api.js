@@ -38,8 +38,9 @@ router.post('/user/login', upload.none(),  async function(req, res, next) {
       }
     }
   })
-  router.get("/main", validateToken, function(req, res) {
-    res.send("HELLO")
+
+router.get("/main", validateToken, function(req, res) {
+  res.redirect("/api/main")
 })
 
 router.post('/user/register', async (req, res) => {
