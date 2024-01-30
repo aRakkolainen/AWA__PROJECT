@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 let profileSchema = new Schema({
     username: {type: String},
     registerDate: {type: Date},
-    picture: {type: String}, 
-    bio: {type: String}
+    picture: {type: Object}, 
+    bio: {type: String},
 })
 
 module.exports = mongoose.model("profiles", profileSchema);

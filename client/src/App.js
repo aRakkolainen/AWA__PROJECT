@@ -1,16 +1,19 @@
 //import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import {useEffect} from 'react';
-import Login from './components/Login';
-import Header from './components/Header';
-import Register from './components/Register';
-import Profile from './components/EditProfile';
+//import {useEffect} from 'react';
+import Login from './components/Login/Login';
+import Header from './components/Header/Header';
+import Register from './components/Register/Register';
+import EditProfile from './components/Profile/EditProfile';
+import Messages from './components/Messages/Messages';
 import 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 //import ShowUsers from './components/ShowUsers';
 
 import {useState} from "react";
-import MainPage from './components/MainPage';
+import AuthenticatedMainPage from './components/MainPage/AuthenticatedMainPage';
+import MainPage from './components/MainPage/MainPage';
 function App() {
   const [jwt, setJwt] = useState("");
   const [user, setUser] = useState({});
@@ -23,22 +26,34 @@ function App() {
     })
     .then(console.log("main page"))
 })*/
+//Testing if user is logged in
+let mainElement; 
+let editPage;
+let messages; 
+  if (localStorage.getItem("auth_token")) {
+    mainElement = <AuthenticatedMainPage></AuthenticatedMainPage>;
+    editPage = <EditProfile></EditProfile>
+    messages = <Messages></Messages>
+  } else {
+    mainElement = <MainPage></MainPage>; 
+    editPage = <MainPage></MainPage>
+    messages = <MainPage></MainPage>
+  }
 
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Header text="Welcome!"></Header>}></Route>
+          <Route path="/" element={mainElement}></Route>
           <Route path="/login" element={<>
-          <Header text="Login"></Header> 
           <Login setJwt={setJwt} setUser={setUser} jwt={jwt}></Login> 
           </>}></Route>
           <Route path="/register" element={<>
-            <Header text="Register"></Header>
             <Register></Register>
           </>}></Route>
-          <Route path="/api/editProfile" element={<Profile user={user}></Profile>}></Route>
-          <Route path="api/main" element={<MainPage></MainPage>}></Route>
+          <Route path="/edit/profile" element={editPage}></Route>
+          <Route path="/main" element={mainElement}></Route>
+          <Route path="/messages" element={messages}></Route>
         </Routes>
     </div>
     </Router>

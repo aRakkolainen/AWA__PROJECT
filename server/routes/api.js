@@ -5,6 +5,8 @@ const passport = require("passport");
 const validateToken = require('../auth/validateToken');
 const User = require("../models/User");
 const UserProfile = require("../models/UserProfile");
+const Friendship = require("../models/Friendship");
+const Friend = require("../models/Friend");
 var router = express.Router();
 const {body, validationResult } = require("express-validator");
 const multer = require("multer");
@@ -40,7 +42,7 @@ router.post('/user/login', upload.none(),  async function(req, res, next) {
   })
 
 router.get("/main", validateToken, function(req, res) {
-  res.redirect("/api/main")
+  res.send("Main page")
 })
 
 router.post('/user/register', async (req, res) => {
@@ -110,6 +112,86 @@ router.post("/user/profile/bio/:username", validateToken, async function(req, re
       res.json({message: "User not found!"})
     }
     
+})
+router.post("/user/profile/pic/:username", validateToken, async function(req, res) {
+  console.log("Adding new profile picture!")
+  let user = await UserProfile.findOne({username: req.params.username}).exec();
+  if (user) {
+    user.picture = req.body.pic;
+    await user.save();
+  } else {
+    res.json({message: "User not found!"})
+  }
+  
+})
+
+router.post("/user/add/friend", validateToken, async function(req, res) {
+  console.log("Adding new friend!");
+  let matchFound = false; 
+  let message; 
+  let friendship = await Friendship.findOne(req.body).exec();
+  let currentUser = await UserProfile.findOne({username: req.body.friendOne}).exec(); 
+  let potentialFriend = await UserProfile.findOne({username: req.body.friendTwo}).exec(); 
+  //Checking if currently logged user has friends list yet
+  const queryCurrent = {user: currentUser._id};
+  let currentFriends = await Friend.findOne(queryCurrent).exec();
+  if (!currentFriends) {
+    //Creating new friends list
+    let newFriends = new Friend({user: currentUser._id, friends: req.body.friendTwo})
+    await newFriends.save();
+  } else {
+    if (!currentFriends.friends.includes(req.body.friendTwo)) {
+      currentFriends.friends.addToSet(req.body.friendTwo);
+      await currentFriends.save();
+    }
+  }
+  // Checking if potential friend has friends list: 
+  const queryPotential = {user: potentialFriend._id}
+  let potentialUserFriends = await Friend.findOne(queryPotential).exec();
+  if(!potentialUserFriends) {
+    console.log("Friends list not found");
+    matchFound = false; 
+  } else {
+    //Checking if potential friend has current user in their friendslist
+  if (potentialUserFriends.friends.indexOf(req.body.friendOne) !== -1 && !friendship) {
+    console.log("MATCH FOUND!");
+    matchFound = true; 
+    let newFriendship = new Friendship({friendOne: req.body.friendOne, friendTwo: req.body.friendTwo})
+    await newFriendship.save();
+  }
+  }
+  res.send({message: "New friend added!", matchFound: matchFound});
+})
+router.get("/user/list/friends/:username", validateToken, async function(req, res) {
+  console.log("Fetching friends..");
+  let results; 
+  let username = req.params.username;  
+  let user = await UserProfile.findOne({username: username});
+  if (!user) {
+      console.log("user not found")
+  } else {
+    let id = user._id;
+    //Finding friends of this user: 
+    let friends = await Friend.findOne({user: id}).exec(); 
+    if (friends) {
+      results = {
+        friendList: friends.friends
+      }
+    } else {
+      results = {
+        friendList: ["No friends"]
+      }
+    }
+  }
+    res.send(results)
+
+})
+router.post("/user/checkFriendStatus", validateToken, async function(req, res){
+    /*let friendships = await FriendStatus.find({status: req.body.user}).exec();
+    let matchFound = false; 
+    console.log(friendships)
+    let pairsList = [];
+    res.send({message: matchFound})*/
 })
 
 module.exports = router;

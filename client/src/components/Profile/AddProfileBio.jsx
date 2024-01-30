@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'; 
+import Header from '../Header/Header';
 const AddProfileBio = (props) => {
     const [bioText, setBioText] = useState("")
     const handleChange = (e) => {
@@ -23,8 +24,8 @@ const AddProfileBio = (props) => {
     return(
         <>
         <div className='container-m'>
-            <label for="bio">Bio text: </label>
-            <input name="bio" type="textarea" maxLength={50} onChange={handleChange} placeholder="Add new bio text.."></input>    
+            <Header type="h3" text="Description:"></Header>
+            <input name="bio" type="textarea" maxLength={200} onChange={handleChange} placeholder="Tell something about yourself!.."></input>    
             <button id="submit" onClick={handleSubmit}>Save</button>
         </div>
         </>

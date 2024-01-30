@@ -1,6 +1,8 @@
+import "./styles.css";
+
 const Header = function(props) {
     return (
-        <h1>{props.text}</h1>
+        <p className={props.type}>{props.text}</p>
     )
 }
 export default Header; 

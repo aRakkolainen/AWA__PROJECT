@@ -1,0 +1,15 @@
+#signup {
+    margin-top: 5%;
+}
+
+.container-lg#register {
+    background-color: #F8F0FF;
+    width: fit-content; 
+    height: fit-content;
+    padding:20%;
+    align-items: center;
+}
+
+#submit {
+    background-color: aliceblue;
+}

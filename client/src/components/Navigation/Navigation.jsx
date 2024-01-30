@@ -18,7 +18,7 @@ const Navigation = () => {
                 <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
                 <Nav className="me-auto">
                     <Nav.Link href="/main">Main page</Nav.Link>
-                    <Nav.Link href="/editProfile">Edit your profile</Nav.Link>
+                    <Nav.Link href="/edit/profile">Edit your profile</Nav.Link>
                     <Nav.Link href="/messages">Messages</Nav.Link>
                     <Button type="button" onClick={handleLogout}>Logout</Button>
                 </Nav>
