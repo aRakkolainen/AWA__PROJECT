@@ -6,7 +6,7 @@ import {Container, Row, Col} from "react-bootstrap";
 import {useState, useEffect} from "react";
 const MessagesView = () => {
     const [chatView, setChatView] = useState(null);
-
+    const [chatData, setChatData] = useState([]);
     /*useEffect(() => {
         fetch("/api/user/list/friends/"+ localStorage.getItem("username"), { method:"GET",
             headers: {
@@ -33,14 +33,16 @@ const MessagesView = () => {
       .then(json => console.log(json))  
       }, []) */
     const openChat = (friend) => {
-        setChatView(<Chat recipient={friend}></Chat>)
         fetch("/api/user/list/chats/"+ localStorage.getItem("username") + "/" + friend, { method:"GET",
         headers: {
             "authorization": "Bearer " + localStorage.getItem("auth_token"),
         }
     })
       .then(response => response.json())
-      .then(json => console.log(json))
+      .then(json => setChatData(json.messages))
+      console.log(chatData)
+      setChatView(<Chat recipient={friend} messages={chatData}></Chat>)
+    
     }
     //chatView = <Chat recipient="None"></Chat>
 
