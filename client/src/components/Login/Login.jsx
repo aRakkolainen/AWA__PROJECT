@@ -1,13 +1,19 @@
 // How to show currently logged in user: https://stackoverflow.com/questions/65060748/react-js-how-to-get-and-show-current-user-when-logged-in
+// Adding delay: https://byby.dev/js-wait-n-seconds
+// Using toasts in react: https://blog.logrocket.com/using-react-toastify-style-toast-messages/
 import {Container, Row, Col} from "react-bootstrap";
 import "./styles.css";
 import {useState} from 'react';
 import Header from "../Header/Header";
 import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//import Popup from "../Popup/Popup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 //Based on course materials from week 12!
 const Login = function () {
     const [userData, setUserData] = useState({});
+    let [message, setMessage] = useState(null); 
     function storeToken(token) {
         localStorage.setItem("auth_token", token);
         localStorage.setItem("username", userData.username)
@@ -28,15 +34,23 @@ const Login = function () {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            //console.log(data.message)
             if (data.token) {
                 //setJwt(data.token);
                 storeToken(data.token);
                 storeUsername(userData.email);
-                window.location.replace("/main");
+                //toast(data.message);
+                setTimeout(function () {
+                    window.location.replace("/main")
+                }, 3000)
+                //window.location.replace("/main");
             }
+            //setMessage(data.message)
+            toast(data.message)
         })
     }
+    //toast.configure();
+    
     const handleChange = (e) => {
         setUserData({...userData, [e.target.name]: e.target.value})
     }
@@ -58,6 +72,7 @@ const Login = function () {
                         <br></br>
                         <br></br>
                         <button id="submit">Login</button> <br></br><br></br>
+                        <ToastContainer position="top-center"></ToastContainer>
                         <a href="/register">Not yet user? Sign up here...</a>
             </form> 
         </div>

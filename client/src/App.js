@@ -6,14 +6,17 @@ import Login from './components/Login/Login';
 import Header from './components/Header/Header';
 import Register from './components/Register/Register';
 import EditProfile from './components/Profile/EditProfile';
-import Messages from './components/Messages/Messages';
+import MessagesView from './components/MessagesView/MessagesView';
 import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import ShowUsers from './components/ShowUsers';
+import 'react-toastify/dist/ReactToastify.css';
 
+//import ShowUsers from './components/ShowUsers';
 import {useState} from "react";
+import {toast} from "react-toastify";
 import AuthenticatedMainPage from './components/MainPage/AuthenticatedMainPage';
 import MainPage from './components/MainPage/MainPage';
+
 function App() {
   const [jwt, setJwt] = useState("");
   const [user, setUser] = useState({});
@@ -33,7 +36,7 @@ let messages;
   if (localStorage.getItem("auth_token")) {
     mainElement = <AuthenticatedMainPage></AuthenticatedMainPage>;
     editPage = <EditProfile></EditProfile>
-    messages = <Messages></Messages>
+    messages = <MessagesView></MessagesView>
   } else {
     mainElement = <MainPage></MainPage>; 
     editPage = <MainPage></MainPage>
