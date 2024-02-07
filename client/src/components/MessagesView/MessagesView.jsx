@@ -7,31 +7,11 @@ import {useState, useEffect} from "react";
 const MessagesView = () => {
     const [chatView, setChatView] = useState(null);
     const [chatData, setChatData] = useState([]);
-    /*useEffect(() => {
-        fetch("/api/user/list/friends/"+ localStorage.getItem("username"), { method:"GET",
-            headers: {
-                "authorization": "Bearer " + localStorage.getItem("auth_token"),
-            }
-        })
-        .then(response => response.json())
-        .then(json => setPossibleFriends(json.friendList))
-        /*possibleFriends.forEach((friend) => {
-            checkFriendship(friend);
-            if (friendStatus === true) {
-                console.log("friend")
-            }
-        })
-    }, [])*/
-    //Fetching all chats where this user is first member..
-    /*useEffect(() => {
-        fetch("/api/user/list/chats/"+ localStorage.getItem("username"), { method:"GET",
-        headers: {
-            "authorization": "Bearer " + localStorage.getItem("auth_token"),
-        }
-    })
-      .then(response => response.json())
-      .then(json => console.log(json))  
-      }, []) */
+    const [visible, setVisible] = useState(false);
+    const closeChat = () => {
+        setVisible(false);
+        console.log(visible);
+    }
     const openChat = (friend) => {
         fetch("/api/user/list/chats/"+ localStorage.getItem("username") + "/" + friend, { method:"GET",
         headers: {
@@ -40,8 +20,13 @@ const MessagesView = () => {
     })
       .then(response => response.json())
       .then(json => setChatData(json.messages))
-      console.log(chatData)
-      setChatView(<Chat recipient={friend} messages={chatData}></Chat>)
+      //Chat view needs to be rendered anyway so this isn't working!
+      /*if (!chatData.includes("No new messages")) {
+        setChatView(<Chat recipient={friend} messages={chatData} visible={visible} closeChat={() => closeChat}></Chat>)
+      }*/
+      setVisible(true);
+      setChatView(<Chat recipient={friend} messages={chatData} closeChat={closeChat} visible={visible}></Chat>)
+        //setChatView(<Chat recipient={friend} messages={chatData} showChat={show}></Chat>)
     
     }
     //chatView = <Chat recipient="None"></Chat>
@@ -58,11 +43,7 @@ const MessagesView = () => {
                 </Col>
                 <Col>
                     <Header type="h1" text="Messages: "></Header>
-                    {chatView}
-                </Col>
-
-                <Col>
-                
+                    {visible && chatView}
                 </Col>
             </Row>
 

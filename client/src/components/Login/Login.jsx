@@ -6,6 +6,8 @@ import "./styles.css";
 import {useState} from 'react';
 import Header from "../Header/Header";
 import 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import Popup from "../Popup/Popup";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 //Based on course materials from week 12!
 const Login = function () {
     const [userData, setUserData] = useState({});
-    let [message, setMessage] = useState(null); 
+    //let [message, setMessage] = useState(null); 
     function storeToken(token) {
         localStorage.setItem("auth_token", token);
         localStorage.setItem("username", userData.username)
@@ -61,7 +63,7 @@ const Login = function () {
                 <Col></Col>
                 <Col>
                 <Header type="h1" text="Login"></Header>
-                <div className="container-lg" id="login">
+                {/*<div className="container-lg" id="login">
                     <form onSubmit={handleSubmit} onChange={handleChange}>
                         <Header type="h4" text="Email: "></Header>
                         <input name="email" type="email"></input>
@@ -75,7 +77,19 @@ const Login = function () {
                         <ToastContainer position="top-center"></ToastContainer>
                         <a href="/register">Not yet user? Sign up here...</a>
             </form> 
-        </div>
+    </div>*/}
+    <Container className="container-lg" id="login">
+        <Form onSubmit={handleSubmit} onChange={handleChange}>
+            <Form.Label htmlFor="input-email">Email:</Form.Label>
+            <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..'></Form.Control>
+            <Form.Label htmlFor="input-password">Password:</Form.Label>
+            <Form.Control type="password" name="password" id="input-password" autoComplete="current-password"></Form.Control>
+            <Button onClick={handleSubmit}>Login</Button>
+            <ToastContainer position="top-center"></ToastContainer>
+            <a href="/register">Not yet user? Sign up here...</a>
+        </Form>
+
+    </Container>
                 
                 </Col>
 

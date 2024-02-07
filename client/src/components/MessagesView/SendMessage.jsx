@@ -1,5 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import {useState} from "react";
+import { toast, ToastContainer } from 'react-toastify';
 
 const SendMessage = (props) => {
     const [message, setMessage] = useState();
@@ -20,7 +21,7 @@ const SendMessage = (props) => {
             }, body: JSON.stringify(newMessage)
         })
         .then(response => response.text())
-        .then(data => console.log(data))
+        .then(data => toast(data))
     }
     const handleChange = (e) => {
         setMessage({...message, [e.target.name]: e.target.value})
@@ -28,7 +29,7 @@ const SendMessage = (props) => {
     return (
         <Form onSubmit={handleSubmit} onChange={handleChange}>
             <Form.Control type="text" name="message" placeholder='Write new message..'></Form.Control>
-
+            <ToastContainer position="top-center"></ToastContainer>
         </Form>
     )
 }

@@ -81,10 +81,13 @@ router.post('/user/register', async (req, res) => {
       let hashedPassword = await bcrypt.hash(req.body.password, 10);  
       let newUser = new User({email: req.body.email, password: hashedPassword})
       await newUser.save();  
-      return res.redirect("/login");
+      //return res.redirect("/login");
+      statusNum = 200; 
+      message = {text: "Register succeeded"};
+      res.status(statusNum).send(message);
     } else {
       statusNum = 403; 
-      message = {email: "Email already in use"};
+      message = {text: "Email already in use"};
       res.status(statusNum).send(message);
       //return res.redirect("/register.html");
     }
@@ -298,7 +301,7 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
     //Trying to find all chats these user has send!
     let sentChats = await Chat.findOne({members: [senderId, recipientId]}).exec();
     let receivedChats = await Chat.findOne({members: [recipientId, senderId]}).exec();  
-    if (sentChats || receivedChats) {
+    if (sentChats && receivedChats) {
       let sentMessages = sentChats.messages;
       let receivedMessages = receivedChats.messages; 
       let messages = sentMessages.concat(receivedMessages);
@@ -307,7 +310,7 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
         (objA, objB) => Number(objA.sendingTime) - Number(objB.sendingTime), 
       )
       let messageList = [];
-      console.log(sortedMessages)
+      //console.log(sortedMessages)
       sortedMessages.forEach(async (message) => {
         //Comparing json objects: https://www.freecodecamp.org/news/javascript-comparison-operators-how-to-compare-objects-for-equality-in-js/
         if (JSON.stringify(message.sender) === JSON.stringify(recipientId)) {
@@ -317,6 +320,8 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
         }
       })
       res.send({messages: messageList})
+    } else {
+      res.send({messages: "No new messages"})
     }
     //console.log(sentChats)
     //console.log(receivedChats)

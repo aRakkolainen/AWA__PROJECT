@@ -102,7 +102,7 @@ const ShowUsers = function(props) {
         if (user.username) {
             return <UserItem username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
         } 
-    })
+    }) 
 
     return(
         <Container>
