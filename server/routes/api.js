@@ -1,7 +1,7 @@
 require('dotenv').config();
 var express = require('express');
 const bcrypt = require("bcryptjs");
-const passport = require("passport");
+//const passport = require("passport");
 const validateToken = require('../auth/validateToken');
 const User = require("../models/User");
 const UserProfile = require("../models/UserProfile");
@@ -266,6 +266,8 @@ router.post("/user/send/message", validateToken, async (req, res) => {
     let sender = await UserProfile.findOne({username: req.body.sender}).exec(); 
     let recipient = await UserProfile.findOne({username: req.body.recipient}).exec(); 
     let newMessage;
+    console.log("Trying to send message!")
+    console.log(sender, recipient)
     if (req.body) {
       if (sender && recipient) {
         newMessage = new Message({sender: sender._id, recipient: recipient._id, sendingTime: req.body.sendingTime, content: req.body.content});
@@ -279,6 +281,7 @@ router.post("/user/send/message", validateToken, async (req, res) => {
           chats.messages.addToSet(newMessage);
           await chats.save(); 
         }
+        console.log("Message sent successfully")
         res.send("Message sent successfully");
       }
     } else {
@@ -293,7 +296,7 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
   let senderName = req.params.sender;
   let recipientName = req.params.recipient; 
   let sender = await UserProfile.findOne({username: senderName}).exec(); 
-  let recipient = await UserProfile.findOne({username: recipientName}).exec(); 
+  let recipient = await UserProfile.findOne({username: recipientName}).exec();
   if (sender && recipient) {
     let senderId = sender._id;
     let recipientId = recipient._id; 
@@ -301,14 +304,109 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
     //Trying to find all chats these user has send!
     let sentChats = await Chat.findOne({members: [senderId, recipientId]}).exec();
     let receivedChats = await Chat.findOne({members: [recipientId, senderId]}).exec();  
+    // If both has sent messages to each other
+    let messagesList = [];
+    let date = new Date();
+    let currentDate = date.getDate() + "." + Number(date.getMonth()+1) + "." + date.getFullYear();
+
     if (sentChats && receivedChats) {
       let sentMessages = sentChats.messages;
       let receivedMessages = receivedChats.messages; 
       let messages = sentMessages.concat(receivedMessages);
+      //These need to be sorted according to the sending time
       //Sorting lists by date in javascript: https://bobbyhadz.com/blog/javascript-sort-array-of-objects-by-date-property
-      let sortedMessages = messages.sort(
-        (objA, objB) => Number(objA.sendingTime) - Number(objB.sendingTime), 
-      )
+      let sortedMessages; 
+      if (messages.length > 0) {
+        sortedMessages = messages.sort(
+          (objA, objB) => Number(objA.sendingTime) - Number(objB.sendingTime), 
+        )
+      }
+
+      //Formating sending time
+       //getting current date: 
+      
+      //Formating the sending time: 
+      //let sendingTime = props.message.sendingTime.getHours(); 
+      //console.log(sendingTime)
+      let sendingTime
+      sortedMessages.forEach(async (message) => {
+        let sendingDate = message.sendingTime.getDate() + "." + Number(message.sendingTime.getMonth()+1) + "." + message.sendingTime.getFullYear();
+        //Checking if message is sent today: 
+        let minutes; 
+        if (Number(message.sendingTime.getMinutes()) < 10) {
+          minutes = "0" + message.sendingTime.getMinutes();
+        } 
+        minutes = message.sendingTime.getMinutes(); 
+        if (currentDate === sendingDate) {
+          sendingTime = message.sendingTime.getHours() + ":" + message.sendingTime.getMinutes(); 
+        } else {
+          sendingTime = sendingDate + " " + message.sendingTime.getHours() + ":" + minutes; 
+          
+        }
+        //Comparing json objects: https://www.freecodecamp.org/news/javascript-comparison-operators-how-to-compare-objects-for-equality-in-js/
+        if (JSON.stringify(message.sender) === JSON.stringify(recipientId)) {
+          messagesList.push({sender: recipientName, sendingTime: sendingTime, content: message.content})
+        } else {
+          messagesList.push({sender: senderName, sendingTime: sendingTime, content: message.content})
+        }
+      })
+    } else if(sentChats) {
+      //only currently logged user has sent messages, these are already sorted
+      let sendingTime; 
+      let messages = sentChats.messages;
+      messages.forEach((message) => {
+        let sendingDate = message.sendingTime.getDate() + "." + message.sendingTime.getMonth()+1 + "." + message.sendingTime.getFullYear();
+        if (currentDate === sendingDate) {
+          sendingTime = message.sendingTime.getHours() + ":" + message.sendingTime.getMinutes(); 
+        } else {
+          if(Number(message.sendingTime.getMinutes()) < 10) {
+            sendingTime = sendingDate + " " + message.sendingTime.getHours() + ":" + "0" + message.sendingTime.getMinutes(); 
+          } else {
+            sendingTime = sendingDate + " " + message.sendingTime.getHours() + ":" + message.sendingTime.getMinutes(); 
+          }
+        }
+        messagesList.push({sender: senderName, sendingTime: sendingTime, content: message.content})
+      })
+      //messagesList = sentChats.messages;
+      
+    } else if(receivedChats) {
+      //only other user has sent messages, these are already sorted!
+      let messages = receivedChats.messages;
+      let sendingTime; 
+      let minutes; 
+      messages.forEach((message) => {
+        let sendingDate = message.sendingTime.getDate() + "." + Number(message.sendingTime.getMonth()+1) + "." + message.sendingTime.getFullYear();
+        if (Number(message.sendingTime.getMinutes()) < 10) {
+          minutes = "0" + message.sendingTime.getMinutes();
+          console.log(minutes)
+        } 
+        minutes = message.sendingTime.getMinutes(); 
+        //console.log(minutes)
+        if (currentDate === sendingDate) {
+          sendingTime = message.sendingTime.getHours() + ":" + minutes; 
+        } else {
+          sendingTime = sendingDate + " " + message.sendingTime.getHours() + ":" + minutes; 
+        }
+        messagesList.push({sender: recipientName, sendingTime: sendingTime, content: message.content})
+      })
+    } 
+    res.send({messages: messagesList})
+
+
+
+
+
+    /*if (sentChats && receivedChats) {
+      
+      //let messages = sentMessages.concat(receivedMessages);
+      //Sorting lists by date in javascript: https://bobbyhadz.com/blog/javascript-sort-array-of-objects-by-date-property
+      let sortedMessages; 
+      if (messages.length > 0) {
+        sortedMessages = messages.sort(
+          (objA, objB) => Number(objA.sendingTime) - Number(objB.sendingTime), 
+        )
+      }
+      console.log(sortedMessages)
       let messageList = [];
       //console.log(sortedMessages)
       sortedMessages.forEach(async (message) => {

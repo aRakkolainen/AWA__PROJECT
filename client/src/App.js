@@ -3,7 +3,7 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 //import {useEffect} from 'react';
 import Login from './components/Login/Login';
-import Header from './components/Header/Header';
+//import Header from './components/Header/Header';
 import Register from './components/Register/Register';
 import EditProfile from './components/Profile/EditProfile';
 import MessagesView from './components/MessagesView/MessagesView';
@@ -13,12 +13,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 //import ShowUsers from './components/ShowUsers';
 import {useState} from "react";
-import {toast} from "react-toastify";
+//import {toast} from "react-toastify";
 import AuthenticatedMainPage from './components/MainPage/AuthenticatedMainPage';
 import MainPage from './components/MainPage/MainPage';
 
 function App() {
-  const [jwt, setJwt] = useState("");
+  //const [jwt, setJwt] = useState("");
   const [user, setUser] = useState({});
   /*useEffect(() => {
     console.log("Fetching main page..")
@@ -49,7 +49,7 @@ let messages;
         <Routes>
           <Route path="/" element={mainElement}></Route>
           <Route path="/login" element={<>
-          <Login setJwt={setJwt} setUser={setUser} jwt={jwt}></Login> 
+          <Login setUser={setUser}></Login> 
           </>}></Route>
           <Route path="/register" element={<>
             <Register></Register>

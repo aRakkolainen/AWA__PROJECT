@@ -7,6 +7,7 @@ const SendMessage = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         //Message object: 
+        console.log(props.recipient)
         let newMessage = {
             sender: localStorage.getItem("username"),
             recipient: props.recipient, 

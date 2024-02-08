@@ -1,16 +1,16 @@
-import {Container, Row, Col, Form, Button} from "react-bootstrap";
+import {Container, Row, Col} from "react-bootstrap";
 import Header from "../Header/Header";
-import {useState} from "react";
-import { ToastContainer, toast } from "react-toastify";
+//import {useState} from "react";
+//import { ToastContainer, toast } from "react-toastify";
 import "./styles.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 //Form is based on this documentation from Bootstrap 5: https://react-bootstrap.netlify.app/docs/forms/overview
 
 //Based on course materials from week 12!
 const Register = function() {
-    const [userData, setUserData] = useState({});
-    const [registerStatus, setRegisterStatus] = useState(null);
-    const handleSubmit = (event) => {
+    //const [userData, setUserData] = useState({});
+    //const [registerStatus, setRegisterStatus] = useState(null);
+    /*const handleSubmit = (event) => {
         event.preventDefault();
         fetch("/api/user/register", {
             method: "POST", 
@@ -34,7 +34,7 @@ const Register = function() {
     }
     const handleChange = (e) => {
         setUserData({...userData, [e.target.name]: e.target.value})
-    }
+    }*/
     
     
     return(

@@ -12,9 +12,6 @@ const ShowUsers = function(props) {
     const [userData, setUserData] = useState([]);
     let [currUserIndex, setCurrentUserIndex] = useState(0);
     let [likedUsers, setLikedUsers] = useState([]);
-    //const [matchFound, setMatchFound] = useState(false);
-    //let popupMessage; 
-    //const [friends, setFriends] = useState([]);
     //Fetching all user profiles
     useEffect(() => {
         fetch("/api/user/list", { method:"GET",

@@ -1,7 +1,22 @@
+
+
 #chat {
     background: rgb(247, 170, 170);
 }
 
 #You {
     background: #F8F0FF;
+    left: 70%;
+}
+
+#friends {
+    margin-left: 15%;
+}
+#messages {
+    margin-left: 5%;
+}
+#sender {
+    border: none;
+    background: none;
+    font-style: italic;
 }
