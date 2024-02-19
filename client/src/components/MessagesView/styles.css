@@ -6,7 +6,6 @@
 
 #You {
     background: #F8F0FF;
-    left: 70%;
 }
 
 #friends {
@@ -20,3 +19,7 @@
     background: none;
     font-style: italic;
 }
+
+#messageView {
+    width: fit-content;
+} 

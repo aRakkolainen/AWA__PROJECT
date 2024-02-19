@@ -27,17 +27,22 @@ const AuthenticatedMainPage = () => {
     })
     .then(response => response.json())
     .then(user => setLoggedUser(user));
-    }, [])
+    }, [username])
     let profileInfo; 
-    // Checking if user has logged in for the first time so they don't have the bio or profile img yet!
-    // Then showing additional component for creating profile bio!
-    if (!loggedUser.bio) {
+    console.log(loggedUser);
+    console.log(loggedUser.message)
+    //If user is not found, then we are showing nothing: 
+    if (loggedUser.message === "User found!") {
+         // Checking if user has logged in for the first time so they don't have the bio or profile img yet!
+        // Then showing additional component for creating profile bio!
+        console.log(loggedUser.userData.username);
+    if (!loggedUser.userData.bio) {
         console.log("New user, create your profile first")
         profileInfo = <CreateProfile></CreateProfile>
     } else {
-        profileInfo = <ProfileInfo user={loggedUser.username}></ProfileInfo>
+        profileInfo = <ProfileInfo user={loggedUser.userData.username}></ProfileInfo>
     }
-
+    }
     return(
         <>
         <Container fluid>

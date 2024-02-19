@@ -102,10 +102,24 @@ router.get("/user/list", validateToken, async function(req, res) {
 //Getting the information from logged user
 router.get("/user/profile/:username", validateToken, async function(req, res) {
     let userInfo = await UserProfile.findOne({username: req.params.username}).exec();
-    if (userInfo) {
-      res.json(userInfo);
+    //Finding also the email address of this user!
+    //Query: username@
+    //based on this: https://sparkbyexamples.com/mongodb/mongodb-check-if-a-field-contains-a-string/
+    let user = await User.find({"email": {$regex: req.params.username+"@"}}).exec(); 
+    let foundUser = user[0];    
+    if (userInfo && foundUser) {
+      //Formating the register date: 
+      let registerDay = userInfo.registerDate.getDate() + "." + userInfo.registerDate.getMonth() + "." + userInfo.registerDate.getFullYear();
+      let userInformation = {
+        username: userInfo.username, 
+        email: foundUser.email, 
+        registerDate: registerDay, 
+        bio: userInfo.bio, 
+        picture: userInfo.picture
+      }
+      res.send({message: "User found!", userData: userInformation});
     } else {
-      res.json({message: "User not found!"})
+      res.send({message: "User not found!"})
     }
 }) 
 //Saving new profile description to the user profile
@@ -120,18 +134,49 @@ router.post("/user/profile/bio/:username", validateToken, async function(req, re
     }
     
 })
-//Saving new profile picture to the user profile
-router.post("/user/profile/pic/:username", validateToken, async function(req, res) {
-  console.log("Adding new profile picture!")
-  let user = await UserProfile.findOne({username: req.params.username}).exec();
-  if (user) {
-    user.picture = req.body.pic;
-    await user.save();
-  } else {
-    res.json({message: "User not found!"})
+
+//Updating email of the user, it changes the username as well because username is automatically generated based on the email address
+router.post("/user/profile/email/:email", validateToken, async function(req, res) {
+  body("email").isEmail(),
+  console.log("Updating email address");
+  //Current username
+  let tempUsername = req.params.email.split("@");
+  let username = tempUsername[0];
+  console.log(username);
+  //Possibly new username
+  let tempNew = req.body.email.split("@");
+  let newUsername = tempNew[0];
+  
+  //Finding User and UserProfile Documents matching current email & username
+  let currentUser = await User.findOne({email: req.params.email}).exec(); 
+  let currentProfile = await UserProfile.findOne({username: username}).exec();
+  //let newProfile = await UserProfile.findOne({username: usernameNew}).exec(); 
+  //Finding if there is user with new email => if there is, not updating and if not, then can be updates
+  let existingUser = await User.findOne({email: req.body.email}).exec();  
+  if (currentUser && currentProfile && !existingUser) {
+    if (req.body.email) {
+      if (username === newUsername) {
+        //first part of email is not changed, updating just email address!
+        currentUser.email = req.body.email
+        res.json({message: "Email updated successfully"});
+      } else {
+        currentUser.email = req.body.email; 
+        await currentUser.save();
+        currentProfile.username = newUsername;
+        currentProfile.save();
+        res.send({message: "Email and username updated successfully", username: newUsername});  
+      }
+    } else {
+      res.json({message: "No email given"})
+    }
+  }
+  else {
+    res.json({message: "Updating email failed!"})
   }
   
 })
+
+
 //Adding liked user and possibly new friend if match is found meaning that both users have liked each other
 router.post("/user/add/friend", validateToken, async function(req, res) {
   let matchFound = false;
@@ -223,12 +268,10 @@ router.get("/user/list/likedUsers/:username", validateToken, async function(req,
       results = {
         likedUsersList: likedUsers.likedUsers
       }
-      console.log(results)
     } else {
       results = {
         likedUsersList: ["No liked users"]
       }
-      console.log(results)
     }
   }
     res.send(results)
@@ -267,7 +310,6 @@ router.post("/user/send/message", validateToken, async (req, res) => {
     let recipient = await UserProfile.findOne({username: req.body.recipient}).exec(); 
     let newMessage;
     console.log("Trying to send message!")
-    console.log(sender, recipient)
     if (req.body) {
       if (sender && recipient) {
         newMessage = new Message({sender: sender._id, recipient: recipient._id, sendingTime: req.body.sendingTime, content: req.body.content});

@@ -1,8 +1,8 @@
-import Header from "../Header/Header";
+//import Header from "../Header/Header";
 import MessageItem from "./MessageItem";
 import SendMessage from "./SendMessage";
 import Profile from "../Profile/Profile";
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/CloseButton';
 import {Row, Col} from 'react-bootstrap';
@@ -10,11 +10,16 @@ import {Row, Col} from 'react-bootstrap';
 import ClickableHeader from '../Header/ClickableHeader';
 import {List} from 'react-virtualized';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Modal from 'react-bootstrap/Modal';
+//import Modal from 'react-bootstrap/Modal';
 import "./styles.css"
 //Sources: 
 // Creating scrollable component: https://getbootstrap.com/docs/5.1/components/scrollspy/
+//How to pass data from child component to parent component in react: https://www.geeksforgeeks.org/how-to-pass-data-from-one-component-to-other-component-in-reactjs/#approach-2-passing-data-from-child-to-parent-component
+
 //Component for showing individual chat
+
+
+
 
 const Chat = (props) => {
     const [chatData, setChatData] = useState([]);
@@ -29,9 +34,12 @@ const Chat = (props) => {
     })
       .then(response => response.json())
       .then(json => setChatData(json.messages))
-}, []);
+}, [props.recipient]);
+    if (props.visible === true) {
+        props.newMessages(chatData, props.recipient);
+    }
     let messagesList; 
-        console.log(chatData);
+    
         if (chatData) {
             messagesList = chatData.map((message) => {
                 return <MessageItem message={message}></MessageItem>
@@ -93,7 +101,8 @@ const Chat = (props) => {
                 </List>
                 
             </Card.Body>
-            <Card.Footer><SendMessage recipient={props.recipient}></SendMessage></Card.Footer>
+            <Card.Footer>
+                <SendMessage recipient={props.recipient}></SendMessage></Card.Footer>
 
         </Card>
         </div>

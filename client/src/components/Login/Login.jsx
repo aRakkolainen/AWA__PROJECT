@@ -63,21 +63,6 @@ const Login = function () {
                 <Col></Col>
                 <Col>
                 <Header type="h1" text="Login"></Header>
-                {/*<div className="container-lg" id="login">
-                    <form onSubmit={handleSubmit} onChange={handleChange}>
-                        <Header type="h4" text="Email: "></Header>
-                        <input name="email" type="email"></input>
-                        <br></br>
-                        <br></br>
-                        <Header type="h4" text="Password: "></Header>
-                        <input name="password" type="password" autoComplete="current-password"></input>
-                        <br></br>
-                        <br></br>
-                        <button id="submit">Login</button> <br></br><br></br>
-                        <ToastContainer position="top-center"></ToastContainer>
-                        <a href="/register">Not yet user? Sign up here...</a>
-            </form> 
-    </div>*/}
     <Container className="container-lg" id="login">
         <Form onSubmit={handleSubmit} onChange={handleChange}>
             <Form.Label htmlFor="input-email">Email:</Form.Label>

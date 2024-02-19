@@ -9,19 +9,31 @@ const MessagesView = () => {
     //const [chatData, setChatData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [recipient, setRecipient] = useState(null);
+    const [numberOfNewMsg, setNumberOfNewMsg] = useState(0);
     //const [friend, setFriend] = useState=(null);
     const closeChat = () => {
         setVisible(false);
+        setNumberOfNewMessages(0);
     }
     const changeChat = () => {
         setRecipient(null)
     }
+    const setNumberOfNewMessages = (newMsgs, recipient) => {
+        let numberOfNew=0; 
+        if (newMsgs) {
+            for (let i=0; i < newMsgs.length; i++) {
+                if (newMsgs[i].sender === recipient) {
+                    numberOfNew = numberOfNew + 1; 
+                }
+            }
+            setNumberOfNewMsg(numberOfNew); 
+        }
+    }
     const openChat = (friend) => {
         setVisible(true);
         setRecipient(friend)
-        setChatView(<Chat recipient={recipient} close={closeChat}></Chat>);
+        setChatView(<Chat recipient={recipient} close={closeChat} visible={visible} newMessages={setNumberOfNewMessages} ></Chat>);
         //setChatView(<Chat recipient={friend} messages={chatData} showChat={show}></Chat>)
-    
     }
 
     //chatView = <Chat recipient="None"></Chat>
@@ -34,7 +46,7 @@ const MessagesView = () => {
             <Row>
                 <Col xs lg="2" id="friends">
                 {/*List of friends */}
-                <FriendsList openChat={openChat} closeChat={closeChat} changeChat={changeChat}></FriendsList>
+                <FriendsList openChat={openChat} closeChat={closeChat} changeChat={changeChat} numberOfNewMessages={numberOfNewMsg}></FriendsList>
                 </Col>
                 <Col xs lg="5" id="messages">
                     <Header type="h1" text="Messages: "></Header>

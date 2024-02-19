@@ -4,11 +4,12 @@ import {useState, useEffect} from 'react';
 import AddProfileBio from "./AddProfileBio";
 import AddNewPicture from "./AddNewPicture";
 import "./styles.css";
+import EditEmail from "./EditEmail";
 
 const EditProfile = function () {
     let username = localStorage.getItem("username");
     console.log(username);
-    const [userInfo, setUserData] = useState({});
+    const [userData, setUserData] = useState({});
     //Fetching info about logged in user: 
     useEffect(() => {
         fetch("/api/user/profile/"+username, { method:"GET",
@@ -17,18 +18,22 @@ const EditProfile = function () {
         }
     })
     .then(response => response.json())
-    .then(json => setUserData(json));
-    }, [])
+    .then(json => setUserData(json.userData));
+    }, [username])
+    console.log(userData.registerDate);
     return (
         <>
         <Navigation></Navigation>
         <Header text="Edit your profile"></Header>
         <div className="container-m">
             <h2>Current info</h2>
-            <img src={userInfo.picture} alt={userInfo.picture}></img>
-            <h4>Username: {userInfo.username}</h4>
-            <h4>Register date: {userInfo.registerDate}</h4>
-            <h4>Bio: {userInfo.bio}</h4>
+            <h4>Email: {userData.email}</h4>
+            <EditEmail email={userData.email}></EditEmail>
+            <img src={userData.picture} alt={userData.picture}></img>
+            <h4>Username: {userData.username}</h4>
+
+            <h4>Register date: {userData.registerDate}</h4>
+            <h4>Bio: {userData.bio}</h4>
         </div>
         <br></br>
         <AddProfileBio username={username}></AddProfileBio>
