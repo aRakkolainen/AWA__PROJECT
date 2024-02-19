@@ -157,13 +157,14 @@ router.post("/user/profile/email/:email", validateToken, async function(req, res
     if (req.body.email) {
       if (username === newUsername) {
         //first part of email is not changed, updating just email address!
-        currentUser.email = req.body.email
+        currentUser.email = req.body.email;
+        await currentUser.save(); 
         res.json({message: "Email updated successfully"});
       } else {
         currentUser.email = req.body.email; 
         await currentUser.save();
         currentProfile.username = newUsername;
-        currentProfile.save();
+        await currentProfile.save();
         res.send({message: "Email and username updated successfully", username: newUsername});  
       }
     } else {
