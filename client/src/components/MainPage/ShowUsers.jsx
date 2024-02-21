@@ -1,19 +1,16 @@
 import {useState, useEffect} from 'react';
 import UserItem from './UserItem';
 import Container from 'react-bootstrap/Container';
-//import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-;
-//import Header from '../Header/Header';
 
 //Showing toast message when match is found: https://blog.logrocket.com/using-react-toastify-style-toast-messages/
 
 const ShowUsers = function(props) {
     const [userData, setUserData] = useState([]);
-    const [users, setUsers] = useState([]); 
+    const [chatVisible, setChatVisible] = useState(false);
     let [currUserIndex, setCurrentUserIndex] = useState(0);
-    //This needs to be rethought how this is implemented! What if just fetching one user at a time from the database and checking whether user has liked that one?
     //Fetching list of all users this user hasn't liked
     useEffect(() => {
         fetch("/api/user/list/notLikedUsers/"+localStorage.getItem("username"), { method:"GET",
@@ -24,12 +21,10 @@ const ShowUsers = function(props) {
         .then(response => response.json())
         .then(json => setUserData(json.users));
     }, [])
-    console.log(userData);
-
 
     //Function for liking user and saving it to friends list and friend
     const handleLike = (username) => {
-        console.log("You liked this user, saving that info..")
+       console.log("You liked this user, saving that info..")
         let friends ={
            friendOne: localStorage.getItem("username"), 
            friendTwo: username
@@ -44,21 +39,22 @@ const ShowUsers = function(props) {
     
         }).then(response => response.json())
         .then(data => notifyMatch(data.matchFound))
-        //console.log(matchFound)
+
         currUserIndex += 1; 
         setCurrentUserIndex(currUserIndex);
     }
     //How to set positions of toast messages in react: https://stackoverflow.com/questions/68617361/reacttoastify-position-not-working-in-react
     const notifyMatch = (matchFound) => {
-        console.log(matchFound)
         if(matchFound) {
-            toast.success("Match found! Send message by clicking this notification")
+            //askToSendMessage(username);
+            setChatVisible(true);
+            toast.success("Match found! Send message by clicking open Chat button!")
         } 
     }
-
-    const sendMessage = () => {
+    
+    const sendMessage = (friend) => {
         console.log("Open message page..")
-        window.location.replace("/messages")
+        window.location.replace("/messages/"+friend.username);
     }
     //Function for disliking user
     const handleDisLike = () => {
@@ -71,18 +67,20 @@ const ShowUsers = function(props) {
     
     //Creating list of users except the logged in user! Also checking who the user has already liked/added to be friends so not showing same ones again!
     //Creating list of potential users to be liked
-    const userList = userData.map((user) => {
-        if (user.username) {
-            return <UserItem key={user._id} username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
-        } 
-    })
-
-    console.log(userList);
+    let userList; 
+    if(userData) {
+        userList = userData.map((user) => {
+            if (user.username) {
+                return <UserItem key={user._id} username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
+            } 
+        })
+    }
+    let startChatBtn = <Button onClick={() => sendMessage(userList[currUserIndex-1].props)}>Open chat</Button>
     return(
         <Container>
             <ul>{userList[currUserIndex]}</ul>
-            <br></br>
-            <ToastContainer position="top-center" onClick={(sendMessage)}></ToastContainer>
+            <ToastContainer position="bottom-center"></ToastContainer>
+            {chatVisible && startChatBtn}
         </Container>
     )
 }

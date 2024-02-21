@@ -57,6 +57,7 @@ let messages;
           <Route path="/edit/profile" element={editPage}></Route>
           <Route path="/main" element={mainElement}></Route>
           <Route path="/messages" element={messages}></Route>
+          <Route path="/messages/:recipientUsername" element={messages}></Route>
         </Routes>
     </div>
     </Router>

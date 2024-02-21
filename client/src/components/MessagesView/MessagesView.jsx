@@ -3,15 +3,24 @@ import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 import Chat from "./Chat";
 import {Container, Row, Col} from "react-bootstrap";
-import {useState} from "react";
+import {useParams} from "react-router-dom";
+import {useState, useEffect} from "react";
 const MessagesView = () => {
     const [chatView, setChatView] = useState(null);
     //const [chatData, setChatData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [recipientName, setRecipientName] = useState(null);
+    const {recipientUsername} = useParams();
     const [recipient, setRecipient] = useState(null);
     const [numberOfNewMsg, setNumberOfNewMsg] = useState(0);
     //const [friend, setFriend] = useState=(null);
+    useEffect(()=> {
+        if(recipientUsername) {
+            setVisible(true);
+            setRecipientName(recipientUsername);
+            setChatView(<Chat recipientName={recipientUsername} close={closeChat} visible={visible} newMessages={setNumberOfNewMessages}></Chat>)
+        }
+    }, []);
     const closeChat = () => {
         setVisible(false);
         setNumberOfNewMessages(0);
@@ -38,8 +47,8 @@ const MessagesView = () => {
     }
 
     //chatView = <Chat recipient="None"></Chat>
-
-
+    //Checking if these page was redirected from match found, then opening the chat immediately
+    
     return(
         <>
         <Container fluid>

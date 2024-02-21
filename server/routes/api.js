@@ -17,7 +17,7 @@ const storage = multer.memoryStorage();
 const upload = multer(storage);
 const jwt = require("jsonwebtoken");
 
-//Login page
+//Used for login in the app
 router.post('/user/login', upload.none(),  async function(req, res, next) {
   console.log("Trying to login..");
   if (req.body) {
@@ -48,6 +48,13 @@ router.post('/user/login', upload.none(),  async function(req, res, next) {
 router.get("/main", validateToken, function(req, res) {
   res.send("Main page")
 })
+//Loading messages page after match is found 
+
+router.get("/messages", validateToken, function(req, res) {
+  
+})
+
+
 //Registering new user
 router.post('/user/register', async (req, res) => {
   body("email").isEmail(),
@@ -92,6 +99,8 @@ router.post('/user/register', async (req, res) => {
       //return res.redirect("/register.html");
     }
 })
+
+
 //Getting list of all user profiles
 router.get("/user/list", validateToken, async function(req, res) {
   //validateToken()
@@ -99,6 +108,7 @@ router.get("/user/list", validateToken, async function(req, res) {
   let users = await UserProfile.find({}).exec(); 
   res.json(users);
 })
+
 //Getting the information from one user
 router.get("/user/profile/:username", validateToken, async function(req, res) {
     let userInfo = await UserProfile.findOne({username: req.params.username}).exec();
@@ -122,6 +132,7 @@ router.get("/user/profile/:username", validateToken, async function(req, res) {
       res.send({message: "User not found!"})
     }
 }) 
+
 //Saving new profile description to the user profile
 router.post("/user/profile/bio/:username", validateToken, async function(req, res) {
     console.log("Adding bio text!")
@@ -256,41 +267,34 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
   res.send({message: message, matchFound: matchFound});
 })
 
-
+//This is used in showing the queue of possible friends in frontend meaning the users current user has not yet liked 
 router.get("/user/list/notLikedUsers/:username", validateToken, async function(req, res) {
     //Fetching first users this person has liked:
+    console.log("Fetching user list");
     let username = req.params.username; 
     let potentialUsers = [];
-    let allUsers = [];
     let results; 
     let currentUser = await UserProfile.findOne({username: username});
     if (!currentUser) {
       console.log("User not found");
       results = {message: "User not found!"};
     } else {
-      //Finding all users registered to the system
-      allUsers = await UserProfile.find({}).exec(); 
-      //Finding users who this users has liked
+      //Finding all users registered to the system except the currently logged in user
+      potentialUsers = await UserProfile.find({_id: {$ne: currentUser._id}}).exec(); 
+      //Finding users who this user has liked
       let liked = await LikedUser.findOne({user: currentUser._id}).exec();
+      //If user has liked users, then those are not included in potential users list who the user might like
       if (liked) {
-        let likedUsers = await UserProfile.find({_id: {$in: liked.likedUsers}}).exec(); 
-        console.log("Checking if this user has liked someone!");
-        allUsers.map((user) => {
-          console.log(likedUsers.filter({username: user.username}));
-          if (likedUsers.includes(user._id) == false && user.username !== username) {
-              potentialUsers.push(user);
-          }
-        }
-        )
+        potentialUsers = await UserProfile.find({_id: {$nin: liked.likedUsers}, username: {$ne: currentUser.username}}).exec(); 
         results = {
           message: "User has some liked users",
           users: potentialUsers 
         }
-        console.log(results);
+        //Otherwise all users are shown
       } else {
         results = {
           message: "User has no liked users",
-          users: allUsers
+          users: potentialUsers
         }
       }
     }
@@ -299,41 +303,7 @@ router.get("/user/list/notLikedUsers/:username", validateToken, async function(r
 })
 
 
-//This is used to list the liked users of specific user
-router.get("/user/list/likedUsers/:username", validateToken, async function(req, res) {
-  console.log("Fetching liked users");
-  let results;
-  let likedUsersList = []; 
-  let lengthOfList=0; 
-  let likedUsers; 
-  let username = req.params.username;  
-  let user = await UserProfile.findOne({username: username});
-  if (!user) {
-      console.log("user not found")
-  } else {
-    let id = user._id;
-    //Finding users who this users has liked
-    let liked = await LikedUser.findOne({user: id}).exec();
-    if (liked) {
-      likedUsersList = await LikedUser.find({_id: {$in: liked.likedUsers}}).exec(); 
-      console.log(likedUsersList);
-      if (likedUsersList) {
-        results = {
-          likedUsersList: likedUsersList
-        }
-      } else {
-        console.log("This user has no liked users");
-        results = {
-          likedUsersList: ["No friends"]
-        }
-      }
-    }
-    
-    }
-    res.send(results)
-})
-
-//This is used to list the friends of specific users
+//This is used to list the friends of specific user
 router.get("/user/list/friends/:username", validateToken, async function(req, res) {
   console.log("Fetching friends..");
   let results; 
@@ -343,6 +313,7 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
   let user = await UserProfile.findOne({username: username});
   if (!user) {
       console.log("user not found")
+      results = {message: "User not found!"};
   } else {
     let id = user._id;
     //Finding friends of this user: 
@@ -350,25 +321,24 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
     if (friends) {
       foundFriends = friends.friends;
       friendsList = await UserProfile.find({_id: {$in: foundFriends}}); 
-      console.log(friendsList);
       if (friendsList) {
         results = {
+          message: "This user has friends",
           friends: friendsList
         }
       } else {
         results = {
+          message: "This user has no friends",
           friends: []
         }
       }
     }
-
-    console.log(results);
     res.send(results);
   }
 })
 
 
-//Sending messages
+//Sending messages and storing them to the database
 router.post("/user/send/message", validateToken, async (req, res) => {
     let sender = await UserProfile.findOne({username: req.body.sender}).exec(); 
     let recipient = await UserProfile.findOne({username: req.body.recipient}).exec(); 
@@ -396,9 +366,10 @@ router.post("/user/send/message", validateToken, async (req, res) => {
 
 })
 
-//Showing messages 
+
+//Loading the messages between specific sender and recipient
 router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res) => {
-  console.log("Trying to fetch messages")
+  console.log("Trying to fetch new messages")
   let senderName = req.params.sender;
   let recipientName = req.params.recipient; 
   let sender = await UserProfile.findOne({username: senderName}).exec(); 
@@ -427,7 +398,6 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
           (objA, objB) => Number(objA.sendingTime) - Number(objB.sendingTime), 
         )
       }
-
       //Formating sending time
       let sendingTime
       sortedMessages.forEach(async (message) => {
@@ -456,7 +426,7 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
       let sendingTime; 
       let messages = sentChats.messages;
       messages.forEach((message) => {
-        let sendingDate = message.sendingTime.getDate() + "." + message.sendingTime.getMonth()+1 + "." + message.sendingTime.getFullYear();
+        let sendingDate = message.sendingTime.getDate() + "." + Number(message.sendingTime.getMonth()+1) + "." + message.sendingTime.getFullYear();
         if (currentDate === sendingDate) {
           sendingTime = message.sendingTime.getHours() + ":" + message.sendingTime.getMinutes(); 
         } else {
@@ -493,7 +463,6 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
     } 
     res.send({messages: messagesList})
   }
-
 });
 
 module.exports = router;

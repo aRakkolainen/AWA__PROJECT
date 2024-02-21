@@ -62,7 +62,7 @@ console.log(chatData);
     return(
         <div >
             {visible && profile}
-            <Card id="messageView">
+            <Card id="chat">
                 
             <Card.Header>
                 <Row>
@@ -74,16 +74,17 @@ console.log(chatData);
                     <Button onClick={handleClose}></Button>
                 </Row>
             </Card.Header>
-            <Card.Body>
+            <Card.Body style={{overflow: 'scroll'}}>
+                {messagesList}
                 {/*Creating scrollable list of messages is based on this: https://www.dhiwise.com/post/boosting-performance-with-react-scroller-best-practices */}
-                <List id="messageList" height={450} rowCount={messagesList.length} rowHeight={150} rowRenderer={({index, key, style}) => (
+                {/*<List id="messageList" height={450} rowCount={messagesList.length} rowHeight={150} rowRenderer={({index, key, style}) => (
                     <div key={key} style={style}>
                         {messagesList[index]}
                     </div>
                 )}>
 
 
-                </List>
+                </List>*/}
                 
             </Card.Body>
             <Card.Footer>
