@@ -7,7 +7,9 @@ import CreateProfile from "../Profile/CreateProfile";
 import ProfileInfo from "../Profile/ProfileInfo";
 import {Container, Row, Col} from "react-bootstrap";
 const AuthenticatedMainPage = () => {
-    const [loggedUser, setLoggedUser] = useState({})
+    const [userData, setUserData] = useState({});
+    let visible=false; 
+    let loggedUser; 
     useEffect(() => {
         console.log("Fetching main page..")
         fetch("/api/main", {
@@ -26,22 +28,34 @@ const AuthenticatedMainPage = () => {
         }
     })
     .then(response => response.json())
-    .then(user => setLoggedUser(user));
+    .then(user => setUserData(user));
     }, [username])
     let profileInfo; 
-    console.log(loggedUser);
-    console.log(loggedUser.message)
+    console.log(userData);
+    console.log(userData.message)
     //If user is not found, then we are showing nothing: 
-    if (loggedUser.message === "User found!") {
+    if (userData.message === "User found!") {
+        loggedUser = userData.userData;
+        console.log(loggedUser.bio);
          // Checking if user has logged in for the first time so they don't have the bio or profile img yet!
         // Then showing additional component for creating profile bio!
-        console.log(loggedUser.userData.username);
-    if (!loggedUser.userData.bio) {
-        console.log("New user, create your profile first")
-        profileInfo = <CreateProfile></CreateProfile>
+        if(!loggedUser.bio) {
+            console.log("New user, create your profile first");
+            profileInfo = <CreateProfile></CreateProfile>
+            visible = true; 
+        } else {
+            profileInfo = <ProfileInfo user={loggedUser.username}></ProfileInfo>
+            visible = true; 
+        }
+        //console.log(loggedUser.userData.username);
+        /*if (!loggedUser.userData.bio) {
+            console.log("New user, create your profile first")
+            profileInfo = <CreateProfile></CreateProfile>
+        } else {
+            profileInfo = <ProfileInfo user={loggedUser.userData.username}></ProfileInfo>
+        }*/
     } else {
-        profileInfo = <ProfileInfo user={loggedUser.userData.username}></ProfileInfo>
-    }
+        loggedUser = null; 
     }
     return(
         <>
@@ -57,8 +71,8 @@ const AuthenticatedMainPage = () => {
                     </br>
                     <br>
                     </br>
-                    <Header type="h3" text="Would you like to be friends with this user?"></Header>
-                    <ShowUsers loggedUser={loggedUser}></ShowUsers>
+                    {visible && <Header type="h3" text="Would you like to be friends with this user?"></Header>}
+                    {visible && <ShowUsers loggedUser={loggedUser}></ShowUsers>}
                 </Col>
 
                 <Col>

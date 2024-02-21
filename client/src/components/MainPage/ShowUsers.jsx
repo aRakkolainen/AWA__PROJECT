@@ -30,14 +30,12 @@ const ShowUsers = function(props) {
             }
         })
         .then(response => response.json())
-        .then(json => setLikedUsers(json.likedUsersList));
+        .then(json => setLikedUsers(json.likedUsersList))
     }, [])
 
     //Function for liking user and saving it to friends list and friend
     const handleLike = (username) => {
         console.log("You liked this user, saving that info..")
-        //likedUsers.push(username);
-        //setLikedUsers(likedUsers);
         let friends ={
            friendOne: localStorage.getItem("username"), 
            friendTwo: username
@@ -75,38 +73,48 @@ const ShowUsers = function(props) {
         setCurrentUserIndex(currUserIndex);
 
     }
-    //Creating list of users except the logged in user! Also checking who the user has already liked/added to be friends so not showing same ones again!
-    let users = []; 
-    //etFriends(props.loggedUser.friends);
-    userData.map((user) => {
-        // All users besides the logged in user
-        if (user.username !== localStorage.getItem("username")) { 
-            // If logged user has existing friends, those won't be added!
-            if (likedUsers) {
-                if (likedUsers.length > 1) {
-                    if (likedUsers.indexOf(user.username) === -1) {
+
+    const mapUsers = (likedUsers) => {
+        let users = [];
+        userData.map((user) => {
+            // All users besides the logged in user are saved into this list
+            if (user.username !== localStorage.getItem("username")) { 
+                if (likedUsers.length > 0) {
+                    if (likedUsers.includes("No liked users")) {
+                        console.log("No liked users");
                         users.push(user);
                     }
-                } else if (likedUsers.length === 1) {
-                    users.push(user)
-                }
-            } 
+                    else {
+                        console.log("This user has liked users, checking them..")
+                        for (let i=0; i< likedUsers.length; i++) {
+                            //console.log(likedUsers[i]);
+                            if (likedUsers[i] === user.username) {
+                                console.log("Already liked this user, hiding them!");
+                            } else {
+                                users.push(user);
+                            }
+                        }
+                    }
+                } 
+    
         }
-})
-    //console.log(users);
+        return users; 
+    })
+    return users; 
+    }
+    //Creating list of users except the logged in user! Also checking who the user has already liked/added to be friends so not showing same ones again!
+    let users = mapUsers(likedUsers);
     //Creating list of found users
     const userList = users.map((user) => {
         if (user.username) {
             return <UserItem username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
         } 
-    }) 
-
+    })
     return(
         <Container>
             <ul>{userList[currUserIndex]}</ul>
             <br></br>
-            <ToastContainer position="top-center" onClick={(sendMessage)}>
-            </ToastContainer>
+            <ToastContainer position="top-center" onClick={(sendMessage)}></ToastContainer>
         </Container>
     )
 }

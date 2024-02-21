@@ -147,7 +147,7 @@ router.post("/user/profile/email/:email", validateToken, async function(req, res
   let tempNew = req.body.email.split("@");
   let newUsername = tempNew[0];
   
-  //Finding User and UserProfile Documents matching current email & username
+  //Finding User and UserProfile Documents matching current email & username We need to update also all lists where this user is listed as a friend! Same with chats
   let currentUser = await User.findOne({email: req.params.email}).exec(); 
   let currentProfile = await UserProfile.findOne({username: username}).exec();
   //let newProfile = await UserProfile.findOne({username: usernameNew}).exec(); 
@@ -193,11 +193,11 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
   //console.log(currentLikes)
   if (!currentLikes) {
     //Creating new friends list
-    let newLikes = new LikedUser({user: currentUser._id, likedUsers: req.body.friendTwo})
+    let newLikes = new LikedUser({user: currentUser._id, likedUsers: potentialFriend._id})
     await newLikes.save();
   } else {
-    if (!currentLikes.likedUsers.includes(req.body.friendTwo)) {
-      currentLikes.likedUsers.addToSet(req.body.friendTwo);
+    if (!currentLikes.likedUsers.includes(potentialFriend._id)) {
+      currentLikes.likedUsers.addToSet(potentialFriend._id);
       await currentLikes.save();
     }
   }
@@ -212,7 +212,7 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
     //message = "New liked user added!"
   } else {
     //Checking if potential friend has current user in their list of liked users
-    if (potentialUserLikes.likedUsers.indexOf(req.body.friendOne) !== -1) {
+    if (potentialUserLikes.likedUsers.indexOf(currentUser._id) !== -1) {
       matchFound = true; 
       console.log("MATCH FOUND!!")
       //Finding friendlists of both users: 
@@ -220,12 +220,12 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
       let potentialFriends = await Friend.findOne(queryPotential).exec(); 
       // If currently logged user has no friends list, it's sure that these users are not friends yet!
       if (!currentFriends) {
-        let newFriends = new Friend({user: currentUser._id, friends: req.body.friendTwo})
+        let newFriends = new Friend({user: currentUser._id, friends: potentialFriend._id})
         await newFriends.save();
       } else {
         // Friends list exists, so there is possibility that these users are already friends!
-        if (!currentFriends.friends.includes(req.body.friendTwo)) {
-          currentFriends.friends.addToSet(req.body.friendTwo);
+        if (!currentFriends.friends.includes(potentialFriend._id)) {
+          currentFriends.friends.addToSet(potentialFriend._id);
           await currentFriends.save();
           message = "New friend added!"
         } else {
@@ -238,11 +238,11 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
       console.log("Adding you to other friend's list")
       //Checking the same things of potential friend!
       if (!potentialFriends) {
-        let newFriendsOfPotential = new Friend({user: potentialUserLikes._id, friends: req.body.friendOne})
+        let newFriendsOfPotential = new Friend({user: potentialUserLikes._id, friends: currentUser._id})
         await newFriendsOfPotential.save(); 
       } else {
-        if (!potentialFriends.friends.includes(req.body.friendOne)) {
-          potentialFriends.friends.addToSet(req.body.friendOne);
+        if (!potentialFriends.friends.includes(currentUser._id)) {
+          potentialFriends.friends.addToSet(currentUser._id);
           await potentialFriends.save();
           message = "New friend added!"
         } else {
@@ -254,20 +254,32 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
   }
   res.send({message: message, matchFound: matchFound});
 })
+//This is used to list the liked users of specific user
 router.get("/user/list/likedUsers/:username", validateToken, async function(req, res) {
   console.log("Fetching liked users");
-  let results; 
+  let results;
+  let likedUsersList = []; 
+  let lengthOfList=0; 
+  let likedUsers; 
   let username = req.params.username;  
   let user = await UserProfile.findOne({username: username});
   if (!user) {
       console.log("user not found")
   } else {
     let id = user._id;
-    //Finding friends of this user: 
-    let likedUsers = await LikedUser.findOne({user: id}).exec(); 
-    if (likedUsers) {
+    //Finding users who this users has liked
+    let liked = await LikedUser.find({user: id}).exec();
+    if (liked.length > 0) {
+      likedUsers = liked[0].likedUsers;
+      lengthOfList = likedUsers.length; 
+      for (let i=0; i < lengthOfList; i++) {
+        let info = await UserProfile.findOne({_id: likedUsers[i]})
+        if (info) {
+          likedUsersList[i] = info.username; 
+        }
+      }
       results = {
-        likedUsersList: likedUsers.likedUsers
+        likedUsersList: likedUsersList
       }
     } else {
       results = {
@@ -278,10 +290,12 @@ router.get("/user/list/likedUsers/:username", validateToken, async function(req,
     res.send(results)
 })
 
-
+//This is used to list the friends of specific users
 router.get("/user/list/friends/:username", validateToken, async function(req, res) {
   console.log("Fetching friends..");
-  let results; 
+  let results;
+  let friendsList = []; 
+  let foundFriends = []; 
   let username = req.params.username;  
   let user = await UserProfile.findOne({username: username});
   if (!user) {
@@ -289,10 +303,17 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
   } else {
     let id = user._id;
     //Finding friends of this user: 
-    let friends = await Friend.findOne({user: id}).exec(); 
+    let friends = await Friend.findOne({user: id}).exec();
     if (friends) {
+      foundFriends = friends.friends;
+      for (let i=0; i < foundfriends.length; i++) {
+        let info = await UserProfile.findOne({_id: foundFriends[i]})
+        if (info) {
+          friendsList[i] = info; 
+        }
+      } 
       results = {
-        friendList: friends.friends
+        friendList: friendsList
       }
     } else {
       results = {

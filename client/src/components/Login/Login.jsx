@@ -41,14 +41,14 @@ const Login = function () {
                 //setJwt(data.token);
                 storeToken(data.token);
                 storeUsername(userData.email);
-                //toast(data.message);
+                toast.success(data.message);
                 setTimeout(function () {
                     window.location.replace("/main")
                 }, 3000)
                 //window.location.replace("/main");
+            } else {
+                toast.error(data.message)
             }
-            //setMessage(data.message)
-            toast(data.message)
         })
     }
     //toast.configure();

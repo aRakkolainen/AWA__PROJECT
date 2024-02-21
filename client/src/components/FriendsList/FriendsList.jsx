@@ -22,21 +22,22 @@ const FriendsList = (props) => {
     .then(response => response.json())
     .then(json => setFriends(json.friendList))  
     }, []) 
+    console.log(friends);
     let friendsList; 
     //Creating friend items: 
-    if (friends) {
+    /*if (friends) {
       friendsList = friends.map((friend) => {
-        return <ListGroup.Item action onClick={() => props.openChat(friend)} onDoubleClickCapture={props.closeChat}>
+        return <ListGroup.Item action onClick={() => props.openChat(friend.username)} onDoubleClickCapture={props.closeChat}>
           <>
           <Header type="h6" text={friend}></Header>
           <Badge bg="info">{props.numberOfNewMessages}</Badge>
         </></ListGroup.Item>
       })
-    }
+    }*/
     const handleClick = (e) => {
       console.log(e.target.text);
 
-      switch(pageCount) {
+      /*switch(pageCount) {
         case(1): 
           friendsList = friendsList.slice(0, n); 
           break; 
@@ -47,14 +48,14 @@ const FriendsList = (props) => {
           friendsList = friendsList.slice(0, n);
           break; 
       }
-      return friendsList;
+      return friendsList;*/
     }
     //Checking is user has more than 10 friends, if yes, pagination component is created!
 
     console.log(friends.length)
     let pageCount=0; 
     let n=5; 
-    if (friends.length >= n) {
+    /*if (friends.length >= n) {
       moreThanTen = true;
       pageCount = friends.length/10;
     }
@@ -68,7 +69,7 @@ const FriendsList = (props) => {
       default: 
         friendsList = friendsList.slice(0, n);
         break; 
-    }
+    }*/
     //Splitting friend list based on page count! So it shows only 10 items at a time
     //Based on this react bootstrap 5 documentation page: https://react-bootstrap.netlify.app/docs/components/pagination
     //making pagination item clickable: https://stackoverflow.com/questions/59910754/getting-pagination-button-value-with-react-bootstrap-pagination-component
