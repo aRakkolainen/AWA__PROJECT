@@ -295,7 +295,8 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
   console.log("Fetching friends..");
   let results;
   let friendsList = []; 
-  let foundFriends = []; 
+  let foundFriends = [];
+  let numberOfFriends = 0;  
   let username = req.params.username;  
   let user = await UserProfile.findOne({username: username});
   if (!user) {
@@ -303,13 +304,14 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
   } else {
     let id = user._id;
     //Finding friends of this user: 
-    let friends = await Friend.findOne({user: id}).exec();
+    let friends = await Friend.find({user: id}).exec();
     if (friends) {
-      foundFriends = friends.friends;
-      for (let i=0; i < foundfriends.length; i++) {
+      foundFriends = friends[0].friends;
+      numberOfFriends = foundFriends.length; 
+      for (let i=0; i < numberOfFriends; i++) {
         let info = await UserProfile.findOne({_id: foundFriends[i]})
         if (info) {
-          friendsList[i] = info; 
+          friendsList[i] = {username: info.username, bio: info.bio, registerDate: info.registerDate}; 
         }
       } 
       results = {

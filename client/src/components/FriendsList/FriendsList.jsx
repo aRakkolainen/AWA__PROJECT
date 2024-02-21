@@ -24,16 +24,22 @@ const FriendsList = (props) => {
     }, []) 
     console.log(friends);
     let friendsList; 
+    let friendUsernames = []; 
     //Creating friend items: 
-    /*if (friends) {
-      friendsList = friends.map((friend) => {
+    friends.forEach((friend)=> {
+      friendUsernames.push(friend.username);
+    })
+
+    if (friends) {
+      friendsList = friendUsernames.map((friend) => {
+        console.log(friend)
         return <ListGroup.Item action onClick={() => props.openChat(friend.username)} onDoubleClickCapture={props.closeChat}>
           <>
           <Header type="h6" text={friend}></Header>
           <Badge bg="info">{props.numberOfNewMessages}</Badge>
         </></ListGroup.Item>
       })
-    }*/
+    }
     const handleClick = (e) => {
       console.log(e.target.text);
 
