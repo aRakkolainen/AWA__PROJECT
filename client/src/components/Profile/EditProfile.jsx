@@ -3,6 +3,7 @@ import Header from "../Header/Header";
 import {useState, useEffect} from 'react';
 import AddProfileBio from "./AddProfileBio";
 import AddNewPicture from "./AddNewPicture";
+import UserProfile from "./UserProfile";
 import "./styles.css";
 import EditEmail from "./EditEmail";
 
@@ -20,24 +21,15 @@ const EditProfile = function () {
     .then(response => response.json())
     .then(json => setUserData(json.userData));
     }, [username])
-    console.log(userData.registerDate);
     return (
         <>
         <Navigation></Navigation>
-        <Header text="Edit your profile"></Header>
-        <div className="container-m">
-            <h2>Current info</h2>
-            <h4>Email: {userData.email}</h4>
+        <div className="container-m" id="profile">
+            <UserProfile user={userData}></UserProfile>
+            <Header type="h1" text="Edit your profile"></Header>
             <EditEmail email={userData.email}></EditEmail>
-            <img src={userData.picture} alt={userData.picture}></img>
-            <h4>Username: {userData.username}</h4>
-
-            <h4>Register date: {userData.registerDate}</h4>
-            <h4>Bio: {userData.bio}</h4>
+            <AddProfileBio username={username}></AddProfileBio>
         </div>
-        <br></br>
-        <AddProfileBio username={username}></AddProfileBio>
-        <AddNewPicture username={username}></AddNewPicture>
         </>
     )
 }

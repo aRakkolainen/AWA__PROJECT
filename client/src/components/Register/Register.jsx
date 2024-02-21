@@ -2,6 +2,8 @@ import {Container, Row, Col} from "react-bootstrap";
 import Header from "../Header/Header";
 import {useState} from "react";
 import { ToastContainer, toast } from "react-toastify";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import "./styles.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -40,27 +42,20 @@ const Register = function() {
     
     return(
         <Container id="signup">
-            <Row>
-                <Col></Col>
-                <Col>
-                <Header type="h1" text="Register"></Header>
-                <div className="container-lg" id="register">
-                    <form action="" method="POST" onChange={handleChange} onSubmit={handleSubmit}>
-                        <Header type="h4" text="Email: "></Header>
-                        <input id="input-email" name="email" type="email" placeholder="Fill out an email.."></input>
-                        <br></br>
-                        <Header type="h4" text="Password: "></Header>
-                        <input id="input-password" name="password" type="password" placeholder="Fill out an password.."></input>
-                        <br></br>
-                        <br></br>
-                        <input id="submit" type="submit" value="Register"></input>
-                </form>
+            <Header type="h1" text="Register"></Header>
+            <Form onSubmit={handleSubmit} onChange={handleChange}>
+                <Form.Label htmlFor="input-email">Email:</Form.Label>
+                <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..'></Form.Control>
+                <Form.Label htmlFor="input-password">Password:</Form.Label>
+                <Form.Control type="password" name="password" id="input-password" autoComplete="current-password"></Form.Control>
+                <br></br>
+                <Button onClick={handleSubmit}>Register</Button>
                 <ToastContainer position="top-center"></ToastContainer>
-            </div>
-            
-            </Col>
-            <Col></Col>
-            </Row>
+                <br></br>
+
+
+
+            </Form>
         </Container>
     )
 }

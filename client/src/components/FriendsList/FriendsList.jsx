@@ -5,11 +5,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import Pagination from 'react-bootstrap/Pagination';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 //Checking double clicks: https://www.geeksforgeeks.org/what-is-ondoubleclickcapture-event-in-reactjs/
 const FriendsList = (props) => {
     //let username = localStorage.getItem("username");
     let [friends, setFriends] = useState([]);
-    //let [friendList, setFriend] = useState(null);
+    let friendsList; 
     let moreThanTen = false; 
     console.log("New messages: " + props.numberOfNewMessages);
     //Function for checking if both users have added each other as friends
@@ -20,26 +21,19 @@ const FriendsList = (props) => {
       }
   })
     .then(response => response.json())
-    .then(json => setFriends(json.friendList))  
+    .then(json => setFriends(json.friends))  
     }, []) 
-    console.log(friends);
-    let friendsList; 
-    let friendUsernames = []; 
-    //Creating friend items: 
-    friends.forEach((friend)=> {
-      friendUsernames.push(friend.username);
-    })
-
-    if (friends) {
-      friendsList = friendUsernames.map((friend) => {
-        console.log(friend)
-        return <ListGroup.Item action onClick={() => props.openChat(friend.username)} onDoubleClickCapture={props.closeChat}>
+    if(friends) {
+      console.log(friends);
+      friendsList = friends.map((friend) => {
+        return (<ListGroup.Item key={friend._id} action onClick={() => props.openChat(friend)} onDoubleClickCapture={props.closeChat}>
           <>
-          <Header type="h6" text={friend}></Header>
+          <Header type="h6" text={friend.username}></Header>
           <Badge bg="info">{props.numberOfNewMessages}</Badge>
-        </></ListGroup.Item>
+        </></ListGroup.Item>)
       })
     }
+    console.log(friendsList);
     const handleClick = (e) => {
       console.log(e.target.text);
 
@@ -58,7 +52,7 @@ const FriendsList = (props) => {
     }
     //Checking is user has more than 10 friends, if yes, pagination component is created!
 
-    console.log(friends.length)
+    //console.log(friends.length)
     let pageCount=0; 
     let n=5; 
     /*if (friends.length >= n) {

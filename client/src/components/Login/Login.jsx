@@ -1,7 +1,7 @@
 // How to show currently logged in user: https://stackoverflow.com/questions/65060748/react-js-how-to-get-and-show-current-user-when-logged-in
 // Adding delay: https://byby.dev/js-wait-n-seconds
 // Using toasts in react: https://blog.logrocket.com/using-react-toastify-style-toast-messages/
-import {Container, Row, Col} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import "./styles.css";
 import {useState} from 'react';
 import Header from "../Header/Header";
@@ -57,32 +57,20 @@ const Login = function () {
         setUserData({...userData, [e.target.name]: e.target.value})
     }
     return(
-        <>
-        <Container id="Login">
-            <Row>
-                <Col></Col>
-                <Col>
+            <Container id="login" small>
                 <Header type="h1" text="Login"></Header>
-    <Container className="container-lg" id="login">
-        <Form onSubmit={handleSubmit} onChange={handleChange}>
-            <Form.Label htmlFor="input-email">Email:</Form.Label>
-            <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..'></Form.Control>
-            <Form.Label htmlFor="input-password">Password:</Form.Label>
-            <Form.Control type="password" name="password" id="input-password" autoComplete="current-password"></Form.Control>
-            <Button onClick={handleSubmit}>Login</Button>
-            <ToastContainer position="top-center"></ToastContainer>
-            <a href="/register">Not yet user? Sign up here...</a>
-        </Form>
-
-    </Container>
-                
-                </Col>
-
-
-                <Col></Col>
-            </Row>
+                <Form onSubmit={handleSubmit} onChange={handleChange}>
+                    <Form.Label htmlFor="input-email">Email:</Form.Label>
+                    <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..'></Form.Control>
+                    <Form.Label htmlFor="input-password">Password:</Form.Label>
+                    <Form.Control type="password" name="password" id="input-password" autoComplete="current-password"></Form.Control>
+                    <br></br>
+                    <Button onClick={handleSubmit}>Login</Button>
+                    <ToastContainer position="top-center"></ToastContainer>
+                    <br></br>
+                <a href="/register">New user? Sign up here...</a>
+            </Form>
         </Container>
-        </>
     )
 }
 export default Login; 

@@ -13,58 +13,19 @@ const ShowUsers = function(props) {
     const [userData, setUserData] = useState([]);
     const [users, setUsers] = useState([]); 
     let [currUserIndex, setCurrentUserIndex] = useState(0);
-    let [likedUsers, setLikedUsers] = useState([]);
-    
-    const mapUsers = (likedUsers) => {
-        let users = [];
-        userData.map((user) => {
-            // All users besides the logged in user are saved into this list
-            if (user.username !== localStorage.getItem("username")) { 
-                if (likedUsers.length > 0) {
-                    if (likedUsers.includes("No liked users")) {
-                        console.log("No liked users");
-                        users.push(user);
-                    }
-                    else {
-                        console.log("This user has liked users, checking them..")
-                        for (let i=0; i< likedUsers.length; i++) {
-                            //console.log(likedUsers[i]);
-                            if (likedUsers[i] === user.username) {
-                                console.log("Already liked this user, hiding them!");
-                            } else {
-                                users.push(user);
-                            }
-                        }
-                    }
-                } 
-    
-        }
-    })
-    return users; 
-    }
-    //Fetching all user profiles
+    //This needs to be rethought how this is implemented! What if just fetching one user at a time from the database and checking whether user has liked that one?
+    //Fetching list of all users this user hasn't liked
     useEffect(() => {
-        fetch("/api/user/list", { method:"GET",
+        fetch("/api/user/list/notLikedUsers/"+localStorage.getItem("username"), { method:"GET",
             headers: {
                 "authorization": "Bearer " + localStorage.getItem("auth_token"),
             }
         })
         .then(response => response.json())
-        .then(json => setUserData(json));
+        .then(json => setUserData(json.users));
     }, [])
-    //Fetching users the currently logged user has liked
-    useEffect(() => {
-        fetch("/api/user/list/likedUsers/"+ localStorage.getItem("username"), { method:"GET",
-            headers: {
-                "authorization": "Bearer " + localStorage.getItem("auth_token"),
-            }
-        })
-        .then(response => response.json())
-        .then(json => setLikedUsers(json.likedUsersList))
-    }, [])
-    useEffect(()=> {
-        setUsers(mapUsers(likedUsers));
-    }, [likedUsers])
+    console.log(userData);
+
 
     //Function for liking user and saving it to friends list and friend
     const handleLike = (username) => {
@@ -109,13 +70,14 @@ const ShowUsers = function(props) {
 
     
     //Creating list of users except the logged in user! Also checking who the user has already liked/added to be friends so not showing same ones again!
-    //Creating list of found users
-    console.log(users);
-    const userList = users.map((user) => {
+    //Creating list of potential users to be liked
+    const userList = userData.map((user) => {
         if (user.username) {
-            return <UserItem username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
+            return <UserItem key={user._id} username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
         } 
     })
+
+    console.log(userList);
     return(
         <Container>
             <ul>{userList[currUserIndex]}</ul>

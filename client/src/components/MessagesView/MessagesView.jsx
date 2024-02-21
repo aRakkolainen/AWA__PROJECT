@@ -8,6 +8,7 @@ const MessagesView = () => {
     const [chatView, setChatView] = useState(null);
     //const [chatData, setChatData] = useState([]);
     const [visible, setVisible] = useState(false);
+    const [recipientName, setRecipientName] = useState(null);
     const [recipient, setRecipient] = useState(null);
     const [numberOfNewMsg, setNumberOfNewMsg] = useState(0);
     //const [friend, setFriend] = useState=(null);
@@ -31,9 +32,9 @@ const MessagesView = () => {
     }
     const openChat = (friend) => {
         setVisible(true);
-        setRecipient(friend)
-        setChatView(<Chat recipient={recipient} close={closeChat} visible={visible} newMessages={setNumberOfNewMessages} ></Chat>);
-        //setChatView(<Chat recipient={friend} messages={chatData} showChat={show}></Chat>)
+        setRecipientName(friend.username);
+        setRecipient(friend);
+        setChatView(<Chat recipientName={recipientName} recipient={recipient} close={closeChat} visible={visible} newMessages={setNumberOfNewMessages} ></Chat>);
     }
 
     //chatView = <Chat recipient="None"></Chat>

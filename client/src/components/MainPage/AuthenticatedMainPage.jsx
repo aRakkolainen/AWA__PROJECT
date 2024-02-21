@@ -31,12 +31,9 @@ const AuthenticatedMainPage = () => {
     .then(user => setUserData(user));
     }, [username])
     let profileInfo; 
-    console.log(userData);
-    console.log(userData.message)
     //If user is not found, then we are showing nothing: 
     if (userData.message === "User found!") {
         loggedUser = userData.userData;
-        console.log(loggedUser.bio);
          // Checking if user has logged in for the first time so they don't have the bio or profile img yet!
         // Then showing additional component for creating profile bio!
         if(!loggedUser.bio) {
@@ -47,13 +44,6 @@ const AuthenticatedMainPage = () => {
             profileInfo = <ProfileInfo user={loggedUser.username}></ProfileInfo>
             visible = true; 
         }
-        //console.log(loggedUser.userData.username);
-        /*if (!loggedUser.userData.bio) {
-            console.log("New user, create your profile first")
-            profileInfo = <CreateProfile></CreateProfile>
-        } else {
-            profileInfo = <ProfileInfo user={loggedUser.userData.username}></ProfileInfo>
-        }*/
     } else {
         loggedUser = null; 
     }

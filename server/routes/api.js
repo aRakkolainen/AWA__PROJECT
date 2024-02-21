@@ -99,7 +99,7 @@ router.get("/user/list", validateToken, async function(req, res) {
   let users = await UserProfile.find({}).exec(); 
   res.json(users);
 })
-//Getting the information from logged user
+//Getting the information from one user
 router.get("/user/profile/:username", validateToken, async function(req, res) {
     let userInfo = await UserProfile.findOne({username: req.params.username}).exec();
     //Finding also the email address of this user!
@@ -109,7 +109,7 @@ router.get("/user/profile/:username", validateToken, async function(req, res) {
     let foundUser = user[0];    
     if (userInfo && foundUser) {
       //Formating the register date: 
-      let registerDay = userInfo.registerDate.getDate() + "." + userInfo.registerDate.getMonth() + "." + userInfo.registerDate.getFullYear();
+      let registerDay = userInfo.registerDate.getDate() + "." + Number(userInfo.registerDate.getMonth()+1) + "." + userInfo.registerDate.getFullYear();
       let userInformation = {
         username: userInfo.username, 
         email: foundUser.email, 
@@ -129,6 +129,7 @@ router.post("/user/profile/bio/:username", validateToken, async function(req, re
     if (user) {
       user.bio = req.body.bio
       await user.save();
+      res.json({message: "New bio saved"});
     } else {
       res.json({message: "User not found!"})
     }
@@ -254,6 +255,50 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
   }
   res.send({message: message, matchFound: matchFound});
 })
+
+
+router.get("/user/list/notLikedUsers/:username", validateToken, async function(req, res) {
+    //Fetching first users this person has liked:
+    let username = req.params.username; 
+    let potentialUsers = [];
+    let allUsers = [];
+    let results; 
+    let currentUser = await UserProfile.findOne({username: username});
+    if (!currentUser) {
+      console.log("User not found");
+      results = {message: "User not found!"};
+    } else {
+      //Finding all users registered to the system
+      allUsers = await UserProfile.find({}).exec(); 
+      //Finding users who this users has liked
+      let liked = await LikedUser.findOne({user: currentUser._id}).exec();
+      if (liked) {
+        let likedUsers = await UserProfile.find({_id: {$in: liked.likedUsers}}).exec(); 
+        console.log("Checking if this user has liked someone!");
+        allUsers.map((user) => {
+          console.log(likedUsers.filter({username: user.username}));
+          if (likedUsers.includes(user._id) == false && user.username !== username) {
+              potentialUsers.push(user);
+          }
+        }
+        )
+        results = {
+          message: "User has some liked users",
+          users: potentialUsers 
+        }
+        console.log(results);
+      } else {
+        results = {
+          message: "User has no liked users",
+          users: allUsers
+        }
+      }
+    }
+    res.send(results);
+
+})
+
+
 //This is used to list the liked users of specific user
 router.get("/user/list/likedUsers/:username", validateToken, async function(req, res) {
   console.log("Fetching liked users");
@@ -268,35 +313,32 @@ router.get("/user/list/likedUsers/:username", validateToken, async function(req,
   } else {
     let id = user._id;
     //Finding users who this users has liked
-    let liked = await LikedUser.find({user: id}).exec();
-    if (liked.length > 0) {
-      likedUsers = liked[0].likedUsers;
-      lengthOfList = likedUsers.length; 
-      for (let i=0; i < lengthOfList; i++) {
-        let info = await UserProfile.findOne({_id: likedUsers[i]})
-        if (info) {
-          likedUsersList[i] = info.username; 
+    let liked = await LikedUser.findOne({user: id}).exec();
+    if (liked) {
+      likedUsersList = await LikedUser.find({_id: {$in: liked.likedUsers}}).exec(); 
+      console.log(likedUsersList);
+      if (likedUsersList) {
+        results = {
+          likedUsersList: likedUsersList
+        }
+      } else {
+        console.log("This user has no liked users");
+        results = {
+          likedUsersList: ["No friends"]
         }
       }
-      results = {
-        likedUsersList: likedUsersList
-      }
-    } else {
-      results = {
-        likedUsersList: ["No liked users"]
-      }
     }
-  }
+    
+    }
     res.send(results)
 })
 
 //This is used to list the friends of specific users
 router.get("/user/list/friends/:username", validateToken, async function(req, res) {
   console.log("Fetching friends..");
-  let results;
+  let results; 
   let friendsList = []; 
-  let foundFriends = [];
-  let numberOfFriends = 0;  
+  let foundFriends = []; 
   let username = req.params.username;  
   let user = await UserProfile.findOne({username: username});
   if (!user) {
@@ -304,27 +346,25 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
   } else {
     let id = user._id;
     //Finding friends of this user: 
-    let friends = await Friend.find({user: id}).exec();
+    let friends = await Friend.findOne({user: id}).exec();
     if (friends) {
-      foundFriends = friends[0].friends;
-      numberOfFriends = foundFriends.length; 
-      for (let i=0; i < numberOfFriends; i++) {
-        let info = await UserProfile.findOne({_id: foundFriends[i]})
-        if (info) {
-          friendsList[i] = {username: info.username, bio: info.bio, registerDate: info.registerDate}; 
+      foundFriends = friends.friends;
+      friendsList = await UserProfile.find({_id: {$in: foundFriends}}); 
+      console.log(friendsList);
+      if (friendsList) {
+        results = {
+          friends: friendsList
         }
-      } 
-      results = {
-        friendList: friendsList
-      }
-    } else {
-      results = {
-        friendList: ["No friends"]
+      } else {
+        results = {
+          friends: []
+        }
       }
     }
-  }
-    res.send(results)
 
+    console.log(results);
+    res.send(results);
+  }
 })
 
 
@@ -389,11 +429,6 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
       }
 
       //Formating sending time
-       //getting current date: 
-      
-      //Formating the sending time: 
-      //let sendingTime = props.message.sendingTime.getHours(); 
-      //console.log(sendingTime)
       let sendingTime
       sortedMessages.forEach(async (message) => {
         let sendingDate = message.sendingTime.getDate() + "." + Number(message.sendingTime.getMonth()+1) + "." + message.sendingTime.getFullYear();
@@ -457,55 +492,8 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
       })
     } 
     res.send({messages: messagesList})
-
-
-
-
-
-    /*if (sentChats && receivedChats) {
-      
-      //let messages = sentMessages.concat(receivedMessages);
-      //Sorting lists by date in javascript: https://bobbyhadz.com/blog/javascript-sort-array-of-objects-by-date-property
-      let sortedMessages; 
-      if (messages.length > 0) {
-        sortedMessages = messages.sort(
-          (objA, objB) => Number(objA.sendingTime) - Number(objB.sendingTime), 
-        )
-      }
-      console.log(sortedMessages)
-      let messageList = [];
-      //console.log(sortedMessages)
-      sortedMessages.forEach(async (message) => {
-        //Comparing json objects: https://www.freecodecamp.org/news/javascript-comparison-operators-how-to-compare-objects-for-equality-in-js/
-        if (JSON.stringify(message.sender) === JSON.stringify(recipientId)) {
-          messageList.push({sender: recipientName, sendingTime: message.sendingTime, content: message.content})
-        } else {
-          messageList.push({sender: senderName, sendingTime: message.sendingTime, content: message.content})
-        }
-      })
-      res.send({messages: messageList})
-    } else {
-      res.send({messages: "No new messages"})
-    }
-    //console.log(sentChats)
-    //console.log(receivedChats)
-    //Creating discussion!
-
-    /*if (chats) {
-      //res.send({messages: chats[0].messages})
-    }*/
   }
 
 });
-//based on this website: https://www.freecodecamp.org/news/javascript-date-comparison-how-to-compare-dates-in-js/
-function sortMessages(msg1, msg2) {
-  if (msg1.sendingTime > msg2.sendingTime) {
-    console.log("This is newer message!")
-  } else if (msg1.sendingTime < msg2.sendingTime) {
-    console.log("This is older message!");
-  } else {
-    console.log("Same time!")
-  }
-}
 
 module.exports = router;

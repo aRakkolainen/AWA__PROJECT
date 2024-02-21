@@ -25,21 +25,19 @@ const Chat = (props) => {
     const [chatData, setChatData] = useState([]);
     const [visible, setVisible] = useState(false);
     const [profile, setProfile] = useState(null);
-    //const [visibility, setVisibility] = useState(false);
-    //const [messagesList, setMessagesList] = useState([]);
-    useEffect(() => {fetch("/api/user/list/chats/"+ localStorage.getItem("username") + "/" + props.recipient, { method:"GET",
+    useEffect(() => {fetch("/api/user/list/chats/"+ localStorage.getItem("username") + "/" + props.recipientName, { method:"GET",
         headers: {
             "authorization": "Bearer " + localStorage.getItem("auth_token"),
         }
     })
       .then(response => response.json())
       .then(json => setChatData(json.messages))
-}, [props.recipient]);
+}, [props.recipientName]);
+console.log(chatData);
     if (props.visible === true) {
-        props.newMessages(chatData, props.recipient);
+        props.newMessages(chatData, props.recipientName);
     }
     let messagesList; 
-    
         if (chatData) {
             messagesList = chatData.map((message) => {
                 return <MessageItem message={message}></MessageItem>
@@ -51,19 +49,6 @@ const Chat = (props) => {
         setProfile(<Profile user={props.recipient}></Profile>)
         console.log("Opening profile..")
     }
-    /*let messagesList = [];
-    console.log(chatData)
-    const showMessages = (messages) => {
-        let messagesList = []; 
-        messagesList = messages.map((message) => {
-            return <MessageItem message={message}></MessageItem>  
-        })
-        return messagesList;
-    }
-    if (props.messages !== "No new messages") {
-        messagesList = showMessages(props.messages)
-    }*/
-
     const handleClose = () => {
         /*while(messagesList.length >0) {
             messagesList.pop(); 
@@ -83,7 +68,7 @@ const Chat = (props) => {
                 <Row>
                     <Col>
                     <Card.Title>
-                        <ClickableHeader type="h2" text={props.recipient} handleClick={openProfile}></ClickableHeader>
+                        <ClickableHeader type="h2" text={props.recipientName} handleClick={openProfile}></ClickableHeader>
                     </Card.Title> 
                     </Col>
                     <Button onClick={handleClose}></Button>
@@ -91,7 +76,7 @@ const Chat = (props) => {
             </Card.Header>
             <Card.Body>
                 {/*Creating scrollable list of messages is based on this: https://www.dhiwise.com/post/boosting-performance-with-react-scroller-best-practices */}
-                <List id="messageList" width={800} height={450} rowCount={messagesList.length} rowHeight={150} rowRenderer={({index, key, style}) => (
+                <List id="messageList" height={450} rowCount={messagesList.length} rowHeight={150} rowRenderer={({index, key, style}) => (
                     <div key={key} style={style}>
                         {messagesList[index]}
                     </div>
@@ -102,7 +87,7 @@ const Chat = (props) => {
                 
             </Card.Body>
             <Card.Footer>
-                <SendMessage recipient={props.recipient}></SendMessage></Card.Footer>
+                <SendMessage recipient={props.recipientName}></SendMessage></Card.Footer>
 
         </Card>
         </div>

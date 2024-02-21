@@ -1,5 +1,8 @@
 import {useState, useEffect} from 'react'; 
 import Header from '../Header/Header';
+import Form from 'react-bootstrap/Form';
+import { Button, Toast } from 'react-bootstrap';
+import { ToastContainer, toast } from "react-toastify";
 const AddProfileBio = (props) => {
     const [bioText, setBioText] = useState("")
     const handleChange = (e) => {
@@ -17,16 +20,18 @@ const AddProfileBio = (props) => {
             mode: "cors"
         })
         .then(response => response.json())
-        .then(data => {
-            console.log(data)
+        .then(data => { toast(data);
         })
     }
     return(
         <>
         <div className='container-m'>
-            <Header type="h3" text="Description:"></Header>
-            <input name="bio" type="textarea" maxLength={200} onChange={handleChange} placeholder="Tell something about yourself!.."></input>    
-            <button id="submit" onClick={handleSubmit}>Save</button>
+            <Form onSubmit={handleSubmit} onChange={handleChange}>
+                <Form.Label htmlFor='bio' >New bio: </Form.Label>
+                <Form.Control size="sm" as="textarea" name="bio" maxLength={250} placeholder='Tell something about yourself..'></Form.Control>
+                <Button onClick={handleSubmit}>Save</Button>
+            </Form>
+            <ToastContainer position="bottom-center"></ToastContainer>
         </div>
         </>
     )

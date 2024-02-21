@@ -1,5 +1,9 @@
 #create-profile {
     background-color: #F8F0FF;
-    padding: 10px;
+    padding: 2%;
     align-items: center;
+}
+
+#userProfile {
+    padding:2%;
 }
