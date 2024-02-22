@@ -61,9 +61,9 @@ const Login = function () {
                 <Header type="h1" text="Login"></Header>
                 <Form onSubmit={handleSubmit} onChange={handleChange}>
                     <Form.Label htmlFor="input-email">Email:</Form.Label>
-                    <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..'></Form.Control>
+                    <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..' autoComplete="current-email"></Form.Control>
                     <Form.Label htmlFor="input-password">Password:</Form.Label>
-                    <Form.Control type="password" name="password" id="input-password" autoComplete="current-password"></Form.Control>
+                    <Form.Control type="password" name="password" id="input-password" placeholder="Fill your password.." autoComplete="current-password"></Form.Control>
                     <br></br>
                     <Button onClick={handleSubmit}>Login</Button>
                     <ToastContainer position="top-center"></ToastContainer>

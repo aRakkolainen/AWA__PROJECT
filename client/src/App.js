@@ -7,6 +7,7 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import EditProfile from './components/Profile/EditProfile';
 import MessagesView from './components/MessagesView/MessagesView';
+import Profile from './components/Profile/Profile';
 import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,14 +34,18 @@ function App() {
 let mainElement; 
 let editPage;
 let messages; 
+let profileView; 
   if (localStorage.getItem("auth_token")) {
     mainElement = <AuthenticatedMainPage></AuthenticatedMainPage>;
     editPage = <EditProfile></EditProfile>
     messages = <MessagesView></MessagesView>
+    profileView = <Profile></Profile>
+
   } else {
     mainElement = <MainPage></MainPage>; 
     editPage = <MainPage></MainPage>
     messages = <MainPage></MainPage>
+    profileView = <MainPage></MainPage>
   }
 
   return (
@@ -58,6 +63,7 @@ let messages;
           <Route path="/main" element={mainElement}></Route>
           <Route path="/messages" element={messages}></Route>
           <Route path="/messages/:recipientUsername" element={messages}></Route>
+          <Route path="/profile/:username" element={profileView}></Route>
         </Routes>
     </div>
     </Router>

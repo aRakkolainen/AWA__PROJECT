@@ -9,31 +9,32 @@ import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 //Checking double clicks: https://www.geeksforgeeks.org/what-is-ondoubleclickcapture-event-in-reactjs/
 const FriendsList = (props) => {
     //let username = localStorage.getItem("username");
-    let [friends, setFriends] = useState([]);
+    let [friendData, setFriendData] = useState([]);
     let friendsList; 
     let moreThanTen = false; 
-    console.log("New messages: " + props.numberOfNewMessages);
     //Function for checking if both users have added each other as friends
     useEffect(() => {
       fetch("/api/user/list/friends/"+ localStorage.getItem("username"), { method:"GET",
       headers: {
           "authorization": "Bearer " + localStorage.getItem("auth_token"),
       }
-  })
+    })
     .then(response => response.json())
-    .then(json => setFriends(json.friends))  
+    .then(json => setFriendData(json))  
     }, []) 
-    if(friends) {
-      console.log(friends);
-      friendsList = friends.map((friend) => {
+    //console.log(friendData);
+    if (friendData.message === "This user has friends") {
+      friendsList = friendData.friends.map((friend) => {
         return (<ListGroup.Item key={friend._id} action onClick={() => props.openChat(friend)} onDoubleClickCapture={props.closeChat}>
           <>
           <Header type="h6" text={friend.username}></Header>
           <Badge bg="info">{props.numberOfNewMessages}</Badge>
         </></ListGroup.Item>)
       })
+    } else {
+      friendsList = <Header type="h3" text="No friends"></Header>
     }
-    console.log(friendsList);
+    //console.log(friendsList);
     const handleClick = (e) => {
       console.log(e.target.text);
 

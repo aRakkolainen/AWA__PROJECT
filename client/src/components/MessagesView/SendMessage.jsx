@@ -14,7 +14,6 @@ const SendMessage = (props) => {
             sendingTime: new Date(),
             content: message.message 
         }
-
         fetch("/api/user/send/message", {method: "POST", 
             headers: {
                 "Content-type": "application/json",
@@ -28,8 +27,8 @@ const SendMessage = (props) => {
         setMessage({...message, [e.target.name]: e.target.value})
     }
     return (
-        <Form onSubmit={handleSubmit} onChange={handleChange}>
-            <Form.Control type="text" name="message" placeholder='Write new message..'></Form.Control>
+        <Form onChange={handleChange} onSubmit={handleSubmit}>
+            <Form.Control type="text" name="message" placeholder='Write new message and press ENTER to send..'></Form.Control>
             <ToastContainer position="top-center"></ToastContainer>
         </Form>
     )

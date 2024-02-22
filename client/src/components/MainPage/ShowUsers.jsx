@@ -67,19 +67,21 @@ const ShowUsers = function(props) {
     
     //Creating list of users except the logged in user! Also checking who the user has already liked/added to be friends so not showing same ones again!
     //Creating list of potential users to be liked
-    let userList; 
+    let userList;  
     if(userData) {
         userList = userData.map((user) => {
+            console.log(user)
             if (user.username) {
-                return <UserItem key={user._id} username={user.username} bio={user.bio} like={handleLike} dislike={handleDisLike}></UserItem> 
+                return <UserItem key={user._id} user={user} like={handleLike} dislike={handleDisLike}></UserItem> 
             } 
+
         })
     }
     let startChatBtn = <Button onClick={() => sendMessage(userList[currUserIndex-1].props)}>Open chat</Button>
     return(
         <Container>
             <ul>{userList[currUserIndex]}</ul>
-            <ToastContainer position="bottom-center"></ToastContainer>
+            <ToastContainer position="top-center"></ToastContainer>
             {chatVisible && startChatBtn}
         </Container>
     )

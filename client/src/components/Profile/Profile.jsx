@@ -1,33 +1,64 @@
 import Header from '../Header/Header';
-import Modal from 'react-bootstrap/Modal';
 import {useState, useEffect} from "react";
+import {useParams} from "react-router-dom";
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import Textbox from '../Header/Textbox';
+import ProfilePicture from './ProfilePicture';
+import Navigation from '../Navigation/Navigation';
+import "./styles.css";
 const Profile = (props) => {
-    let username; 
-    let registerDate; 
-    let bio; 
-    //Fetching info about logged in user: 
-    if (props.user) {
-        username = props.user.username; 
-        registerDate = props.user.registerDate;
-        bio = props.user.bio; 
+    const {username} = useParams();
+    const [userData, setUserData] = useState({});
+    const [visible, setVisible] = useState(false);
+    useEffect(()=> {
+        if(username) {
+            console.log("This is page of user: " + username)
+            fetch("/api/user/profile/"+username, { method:"GET",
+                headers: {
+                    "authorization": "Bearer " + localStorage.getItem("auth_token"),
+                }
+            })
+            .then(response => response.json())
+            .then(json => setUserData(json.userData));
+            if(userData.picture !== "") {
+                setVisible(true);
+            }
     }
-    
+    }, [])
+    let thisProfilePic; 
+    let thisUsername; 
+    let thisRegisterDate; 
+    let thisBio; 
+    if (userData) {
+        thisProfilePic = userData.picture; 
+        thisUsername = userData.username; 
+        thisRegisterDate = userData.registerDate; 
+        thisBio = userData.bio; 
+    }
+    return(
+        <>
+        <Navigation></Navigation>
+        <Container fluid id="profile">
+        <Header type="h1" text="User profile"></Header>
+            <Row xs={1} md={1} lg={2}>
+            {visible && <Col>
+                    <ProfilePicture picture={thisProfilePic} username={thisUsername}></ProfilePicture>
 
-    
-    return (
-        <Modal.Dialog>
-            <Modal.Header closeButton>
-                <Modal.Title>{username}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Header type="h4" text="Register date:"></Header>
-                <Header type="p" text={registerDate}></Header>
-                <Header type="h3" text="Bio:"></Header>
-                <Header type="p" text={bio}></Header>
-            </Modal.Body>
-            
-
-        </Modal.Dialog>
+                
+                </Col> }
+                <Col>
+                <Container fluid id="userInfo">
+                    <Textbox headerType="h4" textType="custom" header="Username:  " text={thisUsername}></Textbox>
+                    <Textbox headerType="h4" textType="custom" header="Register date:  " text={thisRegisterDate}></Textbox>
+                    <Textbox headerType="h4" textType="custom" header="Bio text:  " text={thisBio}></Textbox>
+                </Container>
+                </Col>
+            </Row>
+            </Container>
+        
+        
+        
+        </>
     )
 
 }

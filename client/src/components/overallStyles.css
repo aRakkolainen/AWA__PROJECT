@@ -1,0 +1,52 @@
+/*
+This is for implementing responsiveness
+Sources:
+
+/*Mobile*/
+@media only screen and (max-width:500px){
+    #chatBox {
+        width:150px; 
+        height: fit-content; 
+    }
+    .List#messagesList {
+        width:200px; 
+        height:300px;  
+    }
+}
+
+/*Tablets*/
+@media only screen and (max-width:768px){
+    #chatBox {
+        width:fit-content; 
+        height: fit-content; 
+    }
+    #messagesList {
+        width:350px; 
+        height:400px;  
+    }
+}
+/*Laptops*/
+@media only screen and (min-width: 769px) and (max-width:1170px) {
+    #chatBox {
+        width:fit-content; 
+        height: fit-content; 
+    }
+
+    #messagesList {
+        width:400px; 
+        height:400px;  
+    }
+}
+/*Desktops*/
+@media only screen and (min-width: 1171px) {
+    #chatBox {
+        width:fit-content; 
+        height: fit-content; 
+    }
+
+    #messagesList {
+        width:450px; 
+        height:500px; 
+    }
+
+}

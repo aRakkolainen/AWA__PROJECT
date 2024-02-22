@@ -49,8 +49,8 @@ const AuthenticatedMainPage = () => {
     }
     return(
         <>
+        <Navigation></Navigation>
         <Container fluid>
-            <Navigation></Navigation>
             <Row>
                 <Col>
                 </Col>

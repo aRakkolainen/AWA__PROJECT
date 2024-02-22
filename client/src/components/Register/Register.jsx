@@ -43,11 +43,11 @@ const Register = function() {
     return(
         <Container id="signup">
             <Header type="h1" text="Register"></Header>
-            <Form onSubmit={handleSubmit} onChange={handleChange}>
+            <Form onChange={handleChange}>
                 <Form.Label htmlFor="input-email">Email:</Form.Label>
-                <Form.Control type="email" name="email" id="input-email" placeholder='Fill your email..'></Form.Control>
+                <Form.Control type="email" name="email" id="input-email" placeholder='Type new email..'></Form.Control>
                 <Form.Label htmlFor="input-password">Password:</Form.Label>
-                <Form.Control type="password" name="password" id="input-password" autoComplete="current-password"></Form.Control>
+                <Form.Control type="password" name="password" id="input-password" autoComplete="current-password" placeholder="Type new password.."required></Form.Control>
                 <br></br>
                 <Button onClick={handleSubmit}>Register</Button>
                 <ToastContainer position="top-center"></ToastContainer>

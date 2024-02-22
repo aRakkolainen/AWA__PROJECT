@@ -12,9 +12,17 @@ const Message = require("../models/Message");
 const Chat = require("../models/Chat");
 var router = express.Router();
 const {body, validationResult } = require("express-validator");
+//Based on this tutorial: https://medium.com/swlh/how-to-upload-image-using-multer-in-node-js-f3aeffb90657
 const multer = require("multer");
-const storage = multer.memoryStorage(); 
-const upload = multer(storage);
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads')
+  }, 
+  filename: function(req, file, cb) {
+    cb(null, file.originalname)
+  }
+}); 
+const upload = multer({storage: storage});
 const jwt = require("jsonwebtoken");
 
 //Used for login in the app
@@ -140,12 +148,35 @@ router.post("/user/profile/bio/:username", validateToken, async function(req, re
     if (user) {
       user.bio = req.body.bio
       await user.save();
-      res.json({message: "New bio saved"});
+      res.send({message: "New bio saved"});
     } else {
-      res.json({message: "User not found!"})
+      res.send({message: "User not found!"})
+    }
+})
+
+//This is based on this tutorial: https://medium.com/swlh/how-to-upload-image-using-multer-in-node-js-f3aeffb90657 and also Leevi Lautanen helped with this
+router.post("/user/profile/picture/:username", upload.single('file'), async function(req, res){
+    console.log("Trying to save image..");
+    let img = req.file; 
+    let picture; 
+    let response; 
+    if (img) {
+      //Finding user: 
+      let user = await UserProfile.findOne({username: req.params.username});
+      if (user){
+        let src = req.protocol +'://'+req.get('host')+ "/" +req.file.path
+        user.picture = src; 
+        await user.save();
+      response = "New picture saved successfully!";
+    }
+    } else {
+      response = "Saving picture failed!";
     }
     
+    res.send({message: response});
 })
+
+
 
 //Updating email of the user, it changes the username as well because username is automatically generated based on the email address
 router.post("/user/profile/email/:email", validateToken, async function(req, res) {
@@ -154,7 +185,6 @@ router.post("/user/profile/email/:email", validateToken, async function(req, res
   //Current username
   let tempUsername = req.params.email.split("@");
   let username = tempUsername[0];
-  console.log(username);
   //Possibly new username
   let tempNew = req.body.email.split("@");
   let newUsername = tempNew[0];
@@ -165,26 +195,22 @@ router.post("/user/profile/email/:email", validateToken, async function(req, res
   //let newProfile = await UserProfile.findOne({username: usernameNew}).exec(); 
   //Finding if there is user with new email => if there is, not updating and if not, then can be updates
   let existingUser = await User.findOne({email: req.body.email}).exec();  
+  console.log(existingUser);
   if (currentUser && currentProfile && !existingUser) {
-    if (req.body.email) {
       if (username === newUsername) {
         //first part of email is not changed, updating just email address!
         currentUser.email = req.body.email;
         await currentUser.save(); 
-        res.json({message: "Email updated successfully"});
+        res.json({message: "Email updated successfully", status: 200});
       } else {
         currentUser.email = req.body.email; 
         await currentUser.save();
         currentProfile.username = newUsername;
         await currentProfile.save();
-        res.send({message: "Email and username updated successfully", username: newUsername});  
+        res.send({message: "Email and username updated successfully", username: newUsername, status: 200});  
       }
-    } else {
-      res.json({message: "No email given"})
-    }
-  }
-  else {
-    res.json({message: "Updating email failed!"})
+  } else {
+    res.json({message: "Updating email failed, email reserved"})
   }
   
 })
@@ -202,17 +228,17 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
   const queryCurrent = {user: currentUser._id};
   //Finding whether the currently logged user has list of liked users already
   let currentLikes = await LikedUser.findOne(queryCurrent).exec();
-  //console.log(currentLikes)
-  if (!currentLikes) {
-    //Creating new friends list
-    let newLikes = new LikedUser({user: currentUser._id, likedUsers: potentialFriend._id})
-    await newLikes.save();
-  } else {
-    if (!currentLikes.likedUsers.includes(potentialFriend._id)) {
-      currentLikes.likedUsers.addToSet(potentialFriend._id);
-      await currentLikes.save();
+  if (!potentialFriend) return res.send({message: "User not found!"})
+    if (!currentLikes) {
+      //Creating new friends list
+      let newLikes = new LikedUser({user: currentUser._id, likedUsers: potentialFriend._id})
+      await newLikes.save();
+    } else {
+      if (!currentLikes.likedUsers.includes(potentialFriend._id)) {
+        currentLikes.likedUsers.addToSet(potentialFriend._id);
+        await currentLikes.save();
+      }
     }
-  }
   message = "New liked user added!"
   // Checking if potential friend candidate has a list of liked users:
   // If not, match cannot be found either!
@@ -245,12 +271,10 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
           message = "Already friends!"
         }
       }
-      
-    
       console.log("Adding you to other friend's list")
       //Checking the same things of potential friend!
       if (!potentialFriends) {
-        let newFriendsOfPotential = new Friend({user: potentialUserLikes._id, friends: currentUser._id})
+        let newFriendsOfPotential = new Friend({user: potentialFriend._id, friends: currentUser._id})
         await newFriendsOfPotential.save(); 
       } else {
         if (!potentialFriends.friends.includes(currentUser._id)) {
@@ -263,7 +287,7 @@ router.post("/user/add/friend", validateToken, async function(req, res) {
         }
       }
     } 
-  }
+}
   res.send({message: message, matchFound: matchFound});
 })
 
@@ -313,7 +337,9 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
   let user = await UserProfile.findOne({username: username});
   if (!user) {
       console.log("user not found")
-      results = {message: "User not found!"};
+      results = {
+        message: "User not found!"
+      };
   } else {
     let id = user._id;
     //Finding friends of this user: 
@@ -332,9 +358,15 @@ router.get("/user/list/friends/:username", validateToken, async function(req, re
           friends: []
         }
       }
+    } else {
+      results = {
+        message: "This user has no friends",
+        friends: []
+      }
     }
-    res.send(results);
+    
   }
+  res.send(results);
 })
 
 
@@ -357,7 +389,6 @@ router.post("/user/send/message", validateToken, async (req, res) => {
           chats.messages.addToSet(newMessage);
           await chats.save(); 
         }
-        console.log("Message sent successfully")
         res.send("Message sent successfully");
       }
     } else {

@@ -1,15 +1,12 @@
 import Navigation from "../Navigation/Navigation";
-import Header from "../Header/Header";
 import {useState, useEffect} from 'react';
-import AddProfileBio from "./AddProfileBio";
-import AddNewPicture from "./AddNewPicture";
+import { Container, Row, Col } from "react-bootstrap";
 import UserProfile from "./UserProfile";
 import "./styles.css";
-import EditEmail from "./EditEmail";
+import EditProfileInfo from "./EditProfileInfo";
 
 const EditProfile = function () {
     let username = localStorage.getItem("username");
-    console.log(username);
     const [userData, setUserData] = useState({});
     //Fetching info about logged in user: 
     useEffect(() => {
@@ -24,12 +21,15 @@ const EditProfile = function () {
     return (
         <>
         <Navigation></Navigation>
-        <div className="container-m" id="profile">
-            <UserProfile user={userData}></UserProfile>
-            <Header type="h1" text="Edit your profile"></Header>
-            <EditEmail email={userData.email}></EditEmail>
-            <AddProfileBio username={username}></AddProfileBio>
-        </div>
+        <Row xs={1} md={1} lg={1}>
+        <Col>
+            <UserProfile user={userData}></UserProfile>    
+        </Col>
+        <Col>
+            <EditProfileInfo username={username} email={userData.email}></EditProfileInfo>
+        </Col>
+
+        </Row>
         </>
     )
 }

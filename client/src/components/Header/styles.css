@@ -1,0 +1,37 @@
+
+
+#You {
+    text-align:center; 
+}
+
+#Other {
+    text-align: left; 
+}
+
+#sendingTimeYou {
+    font-style: italic; 
+}
+
+#sendingTimeOther {
+    font-style: italic; 
+}
+
+#biotext {
+    text-align:justify;
+}
+
+#textbox {
+    display:flex;
+    padding:1%;
+}
+
+p.custom {
+    padding-left:2%;
+    font-size:20px;
+    font-style:normal;
+}
+
+p.biotext{
+    padding:2%;
+    text-align:justify;
+}
