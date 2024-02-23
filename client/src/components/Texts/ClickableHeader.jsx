@@ -3,9 +3,8 @@ import "./styles.css";
 const ClickableHeader = function(props) {
     return (
         <>
-            <div onClick={props.handleClick}>
-                <p className={props.type}>{props.text}</p>
-            </div>
+            <div className={props.type} onClick={props.handleClick}>{props.text}</div>
+           
         </>
     )
 }

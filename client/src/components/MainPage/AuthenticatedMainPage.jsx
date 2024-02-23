@@ -55,14 +55,16 @@ const AuthenticatedMainPage = () => {
                 <Col>
                 </Col>
                 <Col>
-                    <Header type="h1" text="Welcome to New Friends Site!"></Header>
+                <Container>
+                <Header type="h1" text="Welcome to New Friends Site!"></Header>
+                </Container>
                     {profileInfo}
                     <br>
                     </br>
                     <br>
                     </br>
-                    {visible && <Header type="h3" text="Would you like to be friends with this user?"></Header>}
-                    {visible && <ShowUsers loggedUser={loggedUser}></ShowUsers>}
+                    <Header type="h3" text="Would you like to be friends with this user?"></Header>
+                    <ShowUsers loggedUser={loggedUser}></ShowUsers>
                 </Col>
 
                 <Col>

@@ -39,7 +39,9 @@ const MessageItem = (props) => {
         <div id={senderId}>
             {imageItem}
             <Header id={senderId} type="h4" text={sender}></Header>
+            <br></br>
             <Header type="p" text={props.message.content}></Header>
+            <br></br>
             <Header id={sendingTime} type="p" text={props.message.sendingTime}></Header>
         </div>
     )

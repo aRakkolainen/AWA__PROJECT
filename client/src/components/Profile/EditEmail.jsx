@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import { InputGroup } from 'react-bootstrap';
 const EditEmail = (props) => {
     const [email, setEmail] = useState("");
-    //const [updateData, setUpdateData] = useState();
     const handleChange = (e) => {
         setEmail({...email, [e.target.name]: e.target.value})
     }
@@ -36,7 +35,7 @@ const EditEmail = (props) => {
                 localStorage.setItem("username", data.username);
             } 
             if (data.status === 200) {
-                toast.success(data.message);
+                toast.success(data.message + ", refresh the page to see change");
             } else {
                 toast.error(data.message);
             }
