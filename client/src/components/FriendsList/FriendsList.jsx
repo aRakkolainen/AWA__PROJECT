@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 //import FriendItem from "./FriendItem";
-import Header from "../Header/Header";
+import Header from "../Texts/Header";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import Pagination from 'react-bootstrap/Pagination';

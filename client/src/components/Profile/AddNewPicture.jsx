@@ -1,16 +1,15 @@
 //Accepting only images in input field: https://stackoverflow.com/questions/3828554/how-to-allow-input-type-file-to-accept-only-image-files
 //Uploading images to the page: https://stackoverflow.com/questions/43692479/how-to-upload-an-image-in-react-js
 //Sending image to the backend: https://www.youtube.com/watch?v=-7w2KtfiMEM
-import {useState, useEffect} from 'react'; 
+import {useState} from 'react'; 
 import { ToastContainer, toast } from "react-toastify";
 import Form from "react-bootstrap/Form";
 import Button from 'react-bootstrap/Button';
-import Header from '../Header/Header';
+import Header from '../Texts/Header';
 import { InputGroup } from 'react-bootstrap';
 import "./styles.css";
 const AddNewPicture = (props) => {
     const [pictureFile, setPictureFile] = useState()
-    const [profilePic, setProfilePic] = useState(); 
     const handleSubmit = (event) => {
         event.preventDefault();
         let url = "/api/user/profile/picture/"+props.username;

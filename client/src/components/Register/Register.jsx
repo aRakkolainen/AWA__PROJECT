@@ -1,5 +1,5 @@
-import {Container, Row, Col} from "react-bootstrap";
-import Header from "../Header/Header";
+import {Container} from "react-bootstrap";
+import Header from "../Texts/Header";
 import {useState} from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Form from 'react-bootstrap/Form';
@@ -33,7 +33,6 @@ const Register = function() {
             toast.error("Email already in use, try other one")
         }
         
-        //.then(data => console.log(data.email))
     }
     const handleChange = (e) => {
         setUserData({...userData, [e.target.name]: e.target.value})
@@ -52,9 +51,6 @@ const Register = function() {
                 <Button onClick={handleSubmit}>Register</Button>
                 <ToastContainer position="top-center"></ToastContainer>
                 <br></br>
-
-
-
             </Form>
         </Container>
     )

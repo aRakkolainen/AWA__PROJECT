@@ -1,5 +1,5 @@
 import FriendsList from "../FriendsList/FriendsList";
-import Header from "../Header/Header";
+import Header from "../Texts/Header";
 import Navigation from "../Navigation/Navigation";
 import Chat from "./Chat";
 import {Container, Row, Col} from "react-bootstrap";
@@ -12,8 +12,6 @@ const MessagesView = () => {
     const [recipientName, setRecipientName] = useState(null);
     const {recipientUsername} = useParams();
     const [recipient, setRecipient] = useState(null);
-    const [numberOfNewMsg, setNumberOfNewMsg] = useState(0);
-    //const [friend, setFriend] = useState=(null);
     //Checking if these page was redirected from match found, then opening the chat immediately
     useEffect(()=> {
         if(recipientUsername) {
@@ -24,36 +22,23 @@ const MessagesView = () => {
     }, []);
     const closeChat = () => {
         setVisible(false);
-        //setNumberOfNewMessages(0);
     }
     const changeChat = () => {
         setRecipient(null)
     }
-    /*const setNumberOfNewMessages = (newMsgs, recipient) => {
-        let numberOfNew=0; 
-        if (newMsgs) {
-            for (let i=0; i < newMsgs.length; i++) {
-                if (newMsgs[i].sender === recipient) {
-                    numberOfNew = numberOfNew + 1; 
-                }
-            }
-            setNumberOfNewMsg(numberOfNew); 
-        }
-    }*/
     const openChat = (friend) => {
         setVisible(true);
         setRecipientName(friend.username);
         setRecipient(friend);
-        console.log(recipient);
         setChatView(<Chat recipientName={recipientName} recipient={recipient} close={closeChat} visible={visible} ></Chat>);
     }
     
     return(
         <>
+        <Navigation></Navigation>
         <Container>
-            <Navigation></Navigation>
-            <Row>
-                <Col xs lg="2" id="friends">
+            <Row xs={1} md={1} lg={2}>
+                <Col xs={5} md={5} lg={2} id="friends">
                 {/*List of friends */}
                 <FriendsList openChat={openChat} closeChat={closeChat} changeChat={changeChat}></FriendsList>
                 </Col>

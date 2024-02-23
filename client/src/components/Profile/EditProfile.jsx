@@ -1,10 +1,10 @@
 import Navigation from "../Navigation/Navigation";
 import {useState, useEffect} from 'react';
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import UserProfile from "./UserProfile";
 import "./styles.css";
 import EditProfileInfo from "./EditProfileInfo";
-
+//Edit profile page
 const EditProfile = function () {
     let username = localStorage.getItem("username");
     const [userData, setUserData] = useState({});
@@ -28,7 +28,6 @@ const EditProfile = function () {
         <Col>
             <EditProfileInfo username={username} email={userData.email}></EditProfileInfo>
         </Col>
-
         </Row>
         </>
     )

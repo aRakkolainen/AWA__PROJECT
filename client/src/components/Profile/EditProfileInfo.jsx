@@ -3,10 +3,10 @@ import { Container } from "react-bootstrap"
 import EditEmail from "./EditEmail";
 import AddProfileBio from "./AddProfileBio";
 import AddNewPicture from "./AddNewPicture";
-import Header from "../Header/Header";
+import Header from "../Texts/Header";
+//Component for editing profile information
 const EditProfileInfo = (props) => {
     return(
-        
         <Container>
             <Header type="h1" text="Edit your profile"></Header>
             <EditEmail email={props.email}></EditEmail>

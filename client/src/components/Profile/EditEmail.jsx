@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'; 
-import Header from '../Header/Header';
+import {useState} from 'react'; 
+import Header from '../Texts/Header';
 import { ToastContainer, toast } from "react-toastify";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -28,15 +28,14 @@ const EditEmail = (props) => {
             toast.warning("Email cannot be empty!");
         }
     }
-
+    //Updates the email and/or username
     const handleUpdate = (data) => {
-        console.log(data);
         if (data) {
             //Updating the username in local storage if it was updated
             if (data.message === "Email and username updated successfully") {
                 localStorage.setItem("username", data.username);
             } 
-            if (data.status == 200) {
+            if (data.status === 200) {
                 toast.success(data.message);
             } else {
                 toast.error(data.message);

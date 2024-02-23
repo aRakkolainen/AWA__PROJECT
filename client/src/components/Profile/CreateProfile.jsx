@@ -1,10 +1,8 @@
-import Header from "../Header/Header";
-import {useState, useEffect} from 'react';
+import Header from '../Texts/Header';
 import AddProfileBio from "./AddProfileBio";
 import AddNewPicture from "./AddNewPicture";
 import { Container } from "react-bootstrap";
 import "./styles.css";
-import { ToastContainer } from "react-toastify";
 
 const CreateProfile = () => {
     let username = localStorage.getItem("username");

@@ -1,7 +1,7 @@
-import {useState, useEffect} from 'react'; 
-import Header from '../Header/Header';
+import {useState} from 'react'; 
+import Header from '../Texts/Header';
 import Form from 'react-bootstrap/Form';
-import { Button, InputGroup, Toast } from 'react-bootstrap';
+import { Button, InputGroup} from 'react-bootstrap';
 import { ToastContainer, toast } from "react-toastify";
 const AddProfileBio = (props) => {
     const [bioText, setBioText] = useState("")

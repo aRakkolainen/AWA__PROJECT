@@ -1,5 +1,5 @@
 //Navbar based on example in react bootstrap documentation: https://react-bootstrap.netlify.app/docs/components/navbar
-import Header from "../Header/Header";
+import Header from "../Texts/Header";
 import ShowUsers from "./ShowUsers";
 import Navigation from "../Navigation/Navigation";
 import {useState, useEffect} from "react";

@@ -4,7 +4,7 @@
 import {Container} from "react-bootstrap";
 import "./styles.css";
 import {useState} from 'react';
-import Header from "../Header/Header";
+import Header from "../Texts/Header";
 import 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -15,7 +15,6 @@ import "react-toastify/dist/ReactToastify.css";
 //Based on course materials from week 12!
 const Login = function () {
     const [userData, setUserData] = useState({});
-    //let [message, setMessage] = useState(null); 
     function storeToken(token) {
         localStorage.setItem("auth_token", token);
         localStorage.setItem("username", userData.username)
@@ -36,7 +35,6 @@ const Login = function () {
         })
         .then(response => response.json())
         .then(data => {
-            //console.log(data.message)
             if (data.token) {
                 //setJwt(data.token);
                 storeToken(data.token);
@@ -45,14 +43,11 @@ const Login = function () {
                 setTimeout(function () {
                     window.location.replace("/main")
                 }, 3000)
-                //window.location.replace("/main");
             } else {
                 toast.error(data.message)
             }
         })
-    }
-    //toast.configure();
-    
+    }   
     const handleChange = (e) => {
         setUserData({...userData, [e.target.name]: e.target.value})
     }

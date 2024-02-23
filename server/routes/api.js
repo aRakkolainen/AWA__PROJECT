@@ -56,11 +56,7 @@ router.post('/user/login', upload.none(),  async function(req, res, next) {
 router.get("/main", validateToken, function(req, res) {
   res.send("Main page")
 })
-//Loading messages page after match is found 
 
-router.get("/messages", validateToken, function(req, res) {
-  
-})
 
 
 //Registering new user
@@ -158,7 +154,6 @@ router.post("/user/profile/bio/:username", validateToken, async function(req, re
 router.post("/user/profile/picture/:username", upload.single('file'), async function(req, res){
     console.log("Trying to save image..");
     let img = req.file; 
-    let picture; 
     let response; 
     if (img) {
       //Finding user: 
@@ -174,6 +169,28 @@ router.post("/user/profile/picture/:username", upload.single('file'), async func
     }
     
     res.send({message: response});
+})
+
+router.get("/user/profile/picture/:username", validateToken, async function(req, res) {
+    let username = req.params.username;
+    let response;  
+    let picture = null; 
+    if(username) {
+      let user = await UserProfile.findOne({username: username});
+      if(user) {
+        if(user.picture) {
+          response = "Profile picture found" 
+          picture = user.picture;
+        } else {
+          response = "No profile picture";
+        }
+      } else {
+        response = "User not found!";
+      }
+    } else {
+      response = "No username";
+    }
+    res.send({message: response, picture:picture});
 })
 
 
@@ -195,7 +212,6 @@ router.post("/user/profile/email/:email", validateToken, async function(req, res
   //let newProfile = await UserProfile.findOne({username: usernameNew}).exec(); 
   //Finding if there is user with new email => if there is, not updating and if not, then can be updates
   let existingUser = await User.findOne({email: req.body.email}).exec();  
-  console.log(existingUser);
   if (currentUser && currentProfile && !existingUser) {
       if (username === newUsername) {
         //first part of email is not changed, updating just email address!
@@ -480,10 +496,8 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
         let sendingDate = message.sendingTime.getDate() + "." + Number(message.sendingTime.getMonth()+1) + "." + message.sendingTime.getFullYear();
         if (Number(message.sendingTime.getMinutes()) < 10) {
           minutes = "0" + message.sendingTime.getMinutes();
-          console.log(minutes)
         } 
         minutes = message.sendingTime.getMinutes(); 
-        //console.log(minutes)
         if (currentDate === sendingDate) {
           sendingTime = message.sendingTime.getHours() + ":" + minutes; 
         } else {

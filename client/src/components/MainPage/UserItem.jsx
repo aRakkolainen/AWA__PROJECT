@@ -1,30 +1,24 @@
 import Card from 'react-bootstrap/Card';
-import { Container } from 'react-bootstrap';
-import ProfilePicture from '../Profile/ProfilePicture';
-import ClickableHeader from '../Header/ClickableHeader';
+import ClickableHeader from '../Texts/ClickableHeader';
 import * as Icon from 'react-bootstrap-icons';
-import Header from '../Header/Header';
+import Header from '../Texts/Header';
 import "./styles.css";
 const UserItem = (props) => {
     const openProfile = (username) => {
         if (username) {
-            console.log(username);
             console.log("Open profile page..")
             window.location.replace("/profile/"+username);
         }
     }
-    console.log(props);
 
     return(
         <>
         <Card style={{width: '20rem'}}>
             <Card.Img src={props.user.picture}>
-                
             </Card.Img>
             <Card.Body>
                 <Card.Title>
-                    <ClickableHeader type="h3" text={props.user.username} handleClick={()=>openProfile(props.username)}>
-                        </ClickableHeader>
+                    <ClickableHeader type="h3" text={props.user.username} handleClick={() => openProfile(props.user.username)}></ClickableHeader>
                 </Card.Title>
                 <Card.Text>
                     <Header type="biotext" text={props.user.bio}></Header>

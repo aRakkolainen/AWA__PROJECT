@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/CloseButton';
 import {Row, Col, ListGroupItem} from 'react-bootstrap';
 //import ListGroup from 'react-bootstrap/ListGroup';
-import ClickableHeader from '../Header/ClickableHeader';
+import ClickableHeader from '../Texts/ClickableHeader';
 import {List} from 'react-virtualized';
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import Modal from 'react-bootstrap/Modal';
@@ -23,10 +23,8 @@ import "../overallStyles.css"
 
 
 const Chat = (props) => {
-    console.log(props.recipientName)
+    const [currentUserPic, setCurrentUserPic] = useState(); 
     const [chatData, setChatData] = useState([]);
-    const [visible, setVisible] = useState(false);
-    const [profile, setProfile] = useState(null);
     useEffect(() => {fetch("/api/user/list/chats/"+ localStorage.getItem("username") + "/" + props.recipientName, { method:"GET",
         headers: {
             "authorization": "Bearer " + localStorage.getItem("auth_token"),
@@ -34,16 +32,32 @@ const Chat = (props) => {
     })
       .then(response => response.json())
       .then(json => setChatData(json.messages))
+
+
+      
 },[props.recipientName]);
 
-
-    /*if (props.visible === true) {
-        props.newMessages(chatData, props.recipientName);
-    }*/
+useEffect(() => {
+    fetch("/api/user/profile/picture/"+localStorage.getItem("username"), { method:"GET",
+    headers: {
+        "authorization": "Bearer " + localStorage.getItem("auth_token")
+    }
+})
+.then(response => response.json())
+.then(data => setCurrentUserPic(data))
+}, [])
+let pictureSrc; 
+if(currentUserPic) {
+    if (currentUserPic.message === "Profile picture found" && currentUserPic.picture) {
+        pictureSrc = currentUserPic.picture;
+    } else {
+        pictureSrc = "No picture";
+    }
+}
     let messagesList; 
         if (chatData) {
             messagesList = chatData.map((message) => {
-                return <MessageItem recipient={props.recipient} message={message}></MessageItem>
+                return <MessageItem recipient={props.recipient} message={message} senderImg={pictureSrc}></MessageItem>
             })
         }
      

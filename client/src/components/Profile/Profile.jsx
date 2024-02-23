@@ -1,8 +1,8 @@
-import Header from '../Header/Header';
+import Header from "../Texts/Header";
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import Textbox from '../Header/Textbox';
+import { Container, Row, Col} from 'react-bootstrap';
+import Textbox from '../Texts/Textbox';
 import ProfilePicture from './ProfilePicture';
 import Navigation from '../Navigation/Navigation';
 import "./styles.css";
@@ -43,8 +43,6 @@ const Profile = (props) => {
             <Row xs={1} md={1} lg={2}>
             {visible && <Col>
                     <ProfilePicture picture={thisProfilePic} username={thisUsername}></ProfilePicture>
-
-                
                 </Col> }
                 <Col>
                 <Container fluid id="userInfo">

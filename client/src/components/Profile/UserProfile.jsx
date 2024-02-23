@@ -1,9 +1,10 @@
-import Header from "../Header/Header";
-import Textbox from "../Header/Textbox";
+import Header from "../Texts/Header";
+import Textbox from "../Texts/Textbox";
 import ProfilePicture from "./ProfilePicture";
 import "./styles.css";
 
 import { Container, Row, Col } from "react-bootstrap";
+//Page for showing user profile
 const UserProfile = (props) => {
     return(
         <>
