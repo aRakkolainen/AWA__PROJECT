@@ -432,7 +432,7 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
     let messagesList = [];
     let date = new Date();
     let currentDate = date.getDate() + "." + Number(date.getMonth()+1) + "." + date.getFullYear();
-
+    //Case when both participants has sent messages
     if (sentChats && receivedChats) {
       let sentMessages = sentChats.messages;
       let receivedMessages = receivedChats.messages; 
@@ -453,8 +453,9 @@ router.get("/user/list/chats/:sender/:recipient", validateToken, async (req, res
         let minutes; 
         if (Number(message.sendingTime.getMinutes()) < 10) {
           minutes = "0" + message.sendingTime.getMinutes();
-        } 
-        minutes = message.sendingTime.getMinutes(); 
+        } else {
+          minutes = message.sendingTime.getMinutes(); 
+        }
         if (currentDate === sendingDate) {
           sendingTime = message.sendingTime.getHours() + ":" + message.sendingTime.getMinutes(); 
         } else {
