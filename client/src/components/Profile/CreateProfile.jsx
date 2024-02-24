@@ -9,6 +9,7 @@ const CreateProfile = () => {
     return(
         <Container className="create-profile">
             <Header type="h2" text="Create your profile"></Header>
+            <br></br>
             <AddProfileBio username={username}></AddProfileBio>
             <AddNewPicture username={username}></AddNewPicture>
         </Container>
