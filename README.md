@@ -7,3 +7,6 @@ npm run dev:client
 server: 
 npm run preinstall 
 npm  run dev:server 
+
+
+Test database is usable by importing the content of testdb folder to local mongodb Compass system. 
