@@ -1,0 +1,84 @@
+[{
+  "_id": {
+    "$oid": "65d9b3a5dadc2395c747abfa"
+  },
+  "username": "aikkuww",
+  "registerDate": {
+    "$date": "2024-02-24T09:15:17.203Z"
+  },
+  "__v": 0,
+  "bio": "New here and looking for friends!",
+  "picture": "http://localhost:5000/uploads\\paint-2985569_640.jpg"
+},
+{
+  "_id": {
+    "$oid": "65d9b6d61a58b5bdd5e726ee"
+  },
+  "username": "userA",
+  "registerDate": {
+    "$date": "2024-02-24T09:28:54.626Z"
+  },
+  "__v": 0,
+  "bio": "New user who enjoys cooking and looking for friends!",
+  "picture": "http://localhost:5000/uploads\\dog-1194083_640.jpg"
+},
+{
+  "_id": {
+    "$oid": "65d9b8791a58b5bdd5e72789"
+  },
+  "username": "userB",
+  "registerDate": {
+    "$date": "2024-02-24T09:35:53.976Z"
+  },
+  "__v": 0,
+  "bio": "Looking for some gaming buddies!",
+  "picture": "http://localhost:5000/uploads\\wolf-2878633_640.jpg"
+},
+{
+  "_id": {
+    "$oid": "65d9b8bd1a58b5bdd5e727b8"
+  },
+  "username": "userC",
+  "registerDate": {
+    "$date": "2024-02-24T09:37:01.453Z"
+  },
+  "__v": 0,
+  "bio": "I love dogs and looking for friends who have dogs!",
+  "picture": "http://localhost:5000/uploads\\ardea-herodias-3836783_640.jpg"
+},
+{
+  "_id": {
+    "$oid": "65d9ba1a1a58b5bdd5e72882"
+  },
+  "username": "userD",
+  "registerDate": {
+    "$date": "2024-02-24T09:42:50.778Z"
+  },
+  "__v": 0,
+  "bio": "Looking for new friends and new here!",
+  "picture": "http://localhost:5000/uploads\\robin-944887_640.jpg"
+},
+{
+  "_id": {
+    "$oid": "65d9ba281a58b5bdd5e72888"
+  },
+  "username": "userE",
+  "registerDate": {
+    "$date": "2024-02-24T09:43:04.518Z"
+  },
+  "__v": 0,
+  "bio": "I love cats and looking for friends who also love cats!",
+  "picture": "http://localhost:5000/uploads\\cat-5646889_640.jpg"
+},
+{
+  "_id": {
+    "$oid": "65d9ba371a58b5bdd5e7288e"
+  },
+  "username": "userF",
+  "registerDate": {
+    "$date": "2024-02-24T09:43:19.660Z"
+  },
+  "__v": 0,
+  "bio": "Funny person looking for funny buddies!",
+  "picture": "http://localhost:5000/uploads\\bulldog-2489829_640.jpg"
+}]

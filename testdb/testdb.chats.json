@@ -1,0 +1,160 @@
+[{
+  "_id": {
+    "$oid": "65d9b8631a58b5bdd5e72776"
+  },
+  "members": [
+    {
+      "$oid": "65d9b3a5dadc2395c747abfa"
+    },
+    {
+      "$oid": "65d9b6d61a58b5bdd5e726ee"
+    }
+  ],
+  "messages": [
+    {
+      "sender": {
+        "$oid": "65d9b3a5dadc2395c747abfa"
+      },
+      "recipient": {
+        "$oid": "65d9b6d61a58b5bdd5e726ee"
+      },
+      "sendingTime": {
+        "$date": "2024-02-24T09:35:31.209Z"
+      },
+      "content": "Hello!",
+      "_id": {
+        "$oid": "65d9b8631a58b5bdd5e72773"
+      },
+      "__v": 0
+    },
+    {
+      "sender": {
+        "$oid": "65d9b3a5dadc2395c747abfa"
+      },
+      "recipient": {
+        "$oid": "65d9b6d61a58b5bdd5e726ee"
+      },
+      "sendingTime": {
+        "$date": "2024-02-24T09:47:09.146Z"
+      },
+      "content": "Yes sure!",
+      "_id": {
+        "$oid": "65d9bb1d1a58b5bdd5e72951"
+      },
+      "__v": 0
+    }
+  ],
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "65d9b9641a58b5bdd5e7282f"
+  },
+  "members": [
+    {
+      "$oid": "65d9b6d61a58b5bdd5e726ee"
+    },
+    {
+      "$oid": "65d9b3a5dadc2395c747abfa"
+    }
+  ],
+  "messages": [
+    {
+      "sender": {
+        "$oid": "65d9b6d61a58b5bdd5e726ee"
+      },
+      "recipient": {
+        "$oid": "65d9b3a5dadc2395c747abfa"
+      },
+      "sendingTime": {
+        "$date": "2024-02-24T09:39:48.047Z"
+      },
+      "content": "Hello back! How are you and would you like to play some games today?",
+      "_id": {
+        "$oid": "65d9b9641a58b5bdd5e7282c"
+      },
+      "__v": 0
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9bb341a58b5bdd5e72986"
+  },
+  "members": [
+    {
+      "$oid": "65d9b3a5dadc2395c747abfa"
+    },
+    {
+      "$oid": "65d9b8791a58b5bdd5e72789"
+    }
+  ],
+  "messages": [
+    {
+      "sender": {
+        "$oid": "65d9b3a5dadc2395c747abfa"
+      },
+      "recipient": {
+        "$oid": "65d9b8791a58b5bdd5e72789"
+      },
+      "sendingTime": {
+        "$date": "2024-02-24T09:47:32.669Z"
+      },
+      "content": "Hellooo!",
+      "_id": {
+        "$oid": "65d9bb341a58b5bdd5e72983"
+      },
+      "__v": 0
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9bb9d1a58b5bdd5e72a01"
+  },
+  "members": [
+    {
+      "$oid": "65d9b8bd1a58b5bdd5e727b8"
+    },
+    {
+      "$oid": "65d9b6d61a58b5bdd5e726ee"
+    }
+  ],
+  "messages": [
+    {
+      "sender": {
+        "$oid": "65d9b8bd1a58b5bdd5e727b8"
+      },
+      "recipient": {
+        "$oid": "65d9b6d61a58b5bdd5e726ee"
+      },
+      "sendingTime": {
+        "$date": "2024-02-24T09:49:16.950Z"
+      },
+      "content": "Hello!",
+      "_id": {
+        "$oid": "65d9bb9d1a58b5bdd5e729fe"
+      },
+      "__v": 0
+    },
+    {
+      "sender": {
+        "$oid": "65d9b8bd1a58b5bdd5e727b8"
+      },
+      "recipient": {
+        "$oid": "65d9b6d61a58b5bdd5e726ee"
+      },
+      "sendingTime": {
+        "$date": "2024-02-24T09:49:21.864Z"
+      },
+      "content": "How are you?",
+      "_id": {
+        "$oid": "65d9bba11a58b5bdd5e72a05"
+      },
+      "__v": 0
+    }
+  ],
+  "__v": 1
+}]

@@ -1,0 +1,96 @@
+[{
+  "_id": {
+    "$oid": "65d9b8631a58b5bdd5e72773"
+  },
+  "sender": {
+    "$oid": "65d9b3a5dadc2395c747abfa"
+  },
+  "recipient": {
+    "$oid": "65d9b6d61a58b5bdd5e726ee"
+  },
+  "sendingTime": {
+    "$date": "2024-02-24T09:35:31.209Z"
+  },
+  "content": "Hello!",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9b9641a58b5bdd5e7282c"
+  },
+  "sender": {
+    "$oid": "65d9b6d61a58b5bdd5e726ee"
+  },
+  "recipient": {
+    "$oid": "65d9b3a5dadc2395c747abfa"
+  },
+  "sendingTime": {
+    "$date": "2024-02-24T09:39:48.047Z"
+  },
+  "content": "Hello back! How are you and would you like to play some games today?",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9bb1d1a58b5bdd5e72951"
+  },
+  "sender": {
+    "$oid": "65d9b3a5dadc2395c747abfa"
+  },
+  "recipient": {
+    "$oid": "65d9b6d61a58b5bdd5e726ee"
+  },
+  "sendingTime": {
+    "$date": "2024-02-24T09:47:09.146Z"
+  },
+  "content": "Yes sure!",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9bb341a58b5bdd5e72983"
+  },
+  "sender": {
+    "$oid": "65d9b3a5dadc2395c747abfa"
+  },
+  "recipient": {
+    "$oid": "65d9b8791a58b5bdd5e72789"
+  },
+  "sendingTime": {
+    "$date": "2024-02-24T09:47:32.669Z"
+  },
+  "content": "Hellooo!",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9bb9d1a58b5bdd5e729fe"
+  },
+  "sender": {
+    "$oid": "65d9b8bd1a58b5bdd5e727b8"
+  },
+  "recipient": {
+    "$oid": "65d9b6d61a58b5bdd5e726ee"
+  },
+  "sendingTime": {
+    "$date": "2024-02-24T09:49:16.950Z"
+  },
+  "content": "Hello!",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9bba11a58b5bdd5e72a05"
+  },
+  "sender": {
+    "$oid": "65d9b8bd1a58b5bdd5e727b8"
+  },
+  "recipient": {
+    "$oid": "65d9b6d61a58b5bdd5e726ee"
+  },
+  "sendingTime": {
+    "$date": "2024-02-24T09:49:21.864Z"
+  },
+  "content": "How are you?",
+  "__v": 0
+}]

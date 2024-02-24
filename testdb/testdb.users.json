@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "65d9b3a5dadc2395c747abfc"
+  },
+  "email": "aikkuww@gmail.com",
+  "password": "$2a$10$cvkblaQHJ2xpA1EfbvAqwOs0YomefcphCwsbR98q/A1F.lVU2p/c2",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9b6d61a58b5bdd5e726f0"
+  },
+  "email": "userA@gmail.com",
+  "password": "$2a$10$z3DViyKRa.CGxwnKliCh7OHbrMSPpnxCzoPDcneDD6Le3XV4qvbxq",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9b87a1a58b5bdd5e7278b"
+  },
+  "email": "userB@gmail.com",
+  "password": "$2a$10$IXSXSmYb3J6hLcei7X2eKeQ6YFNyaX2uDHzkCr292UqV3LpjxYCIO",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9b8d91a58b5bdd5e727c1"
+  },
+  "email": "userC@gmail.com",
+  "password": "$2a$10$w5aqfGvwy52wOPVmgttIXOdwvtfXRGqwvZTiYsnyrYLMNKZjoMNly",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9ba1a1a58b5bdd5e72884"
+  },
+  "email": "userD@gmail.com",
+  "password": "$2a$10$zpyOz8I4zGwiyvmeHf5w3ucRr43e4x/PL2TRCZjoWlN6pwRdcujJm",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9ba281a58b5bdd5e7288a"
+  },
+  "email": "userE@gmail.com",
+  "password": "$2a$10$xNRkuFQJbsJ1nTYMhiLL6eN9U/uXvdQB2JqPzWARUzk7Wh5.1lESa",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65d9ba371a58b5bdd5e72890"
+  },
+  "email": "userF@gmail.com",
+  "password": "$2a$10$tSdYr7eeJ650KXjjlxoP2uXtk.DCgx7ROlDHLRc7710g/sTZjpgbu",
+  "__v": 0
+}]
