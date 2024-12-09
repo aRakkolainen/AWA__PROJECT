@@ -1,6 +1,6 @@
-## Project name: 
+## Project name 
 Course project for course Advanced Web Applications.
-## Description: 
+## Description 
 Detailed description is found from documentation file but shortly this project is about creating tinder clone application for looking for friends.  
 
 ## How to run
@@ -19,3 +19,6 @@ Test database is usable by importing the content of testdb folder to local mongo
 - Learn full-stack development and REST API
 - Learn NoSQL database use, use of MongoDB
 - Demonstrate the final outcomes of learning for the course
+
+## Project status
+Meets the requirements of the course project
